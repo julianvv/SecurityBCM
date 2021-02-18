@@ -1,4 +1,4 @@
-DirectoryIndex index.php
+DirectoryIndex /public/index.php
 
 # enable apache rewrite engine
 RewriteEngine on
@@ -12,4 +12,4 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # Push every request to index.php
-RewriteRule ^(.*)$ index.php [QSA]
+RewriteRule ^(.*)$ public/index.php [QSA]
