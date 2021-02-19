@@ -6,7 +6,8 @@ namespace core;
 
 class LoadEnv
 {
-    public function Load($rootDir){
+    public function Load($rootDir)
+    {
         $array = [];
         $configFile = $rootDir."/.env";
         $file = file($configFile);
