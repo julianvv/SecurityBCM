@@ -4,7 +4,9 @@
 namespace models;
 
 
-class RegisterModel extends Model
+use core\DbModel;
+
+class RegisterModel extends DbModel
 {
     public $firstName = '';
     public $lastName = '';
@@ -12,7 +14,7 @@ class RegisterModel extends Model
     public $password = '';
     public $confirmPassword = '';
 
-    public static function tableName(): string
+    public function tableName(): string
     {
         return 'users';
     }
