@@ -12,7 +12,7 @@ class Request
         $pos = strpos($path, '?');
         if ($pos !== false)
         {
-            $path = substr($path, 0, $pos);
+            return substr($path, 0, $pos);
         }
         return $path;
     }
@@ -24,6 +24,10 @@ class Request
 
     public function getBody()
     {
-        
+        return $_POST;
+    }
+
+    public function  getIP(){
+        return $_SERVER['REMOTE_ADDR'];
     }
 }

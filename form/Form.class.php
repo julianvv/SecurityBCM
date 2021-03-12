@@ -18,7 +18,7 @@ class Form
 
     public static function end()
     {
-        echo '</form>';
+        return '</form>';
     }
 
     public function field($model, $attribute)
