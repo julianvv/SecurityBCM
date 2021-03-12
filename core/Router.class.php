@@ -15,7 +15,6 @@ class Router
 
     public function get($path, $callback)
     {
-
         $this->routes['get'][$path] = $callback;
     }
 
@@ -39,6 +38,7 @@ class Router
         return $this->routes;
     }
 
+
     public function resolve()
     {
         $path = $this->request->getUrl();
@@ -55,10 +55,9 @@ class Router
         if(is_string($callback))
         {
             return $this->generateView($callback, "mainLayout");
-        }else{
-            call_user_func($callback);
         }
 
+        return call_user_func($callback);
     }
 
     public function generateView($viewName, $layout)

@@ -6,7 +6,7 @@ namespace models;
 
 use core\DbModel;
 
-class RegisterModel extends DbModel
+class User extends DbModel
 {
     public $firstName = '';
     public $lastName = '';

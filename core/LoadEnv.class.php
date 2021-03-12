@@ -17,7 +17,7 @@ class LoadEnv
             {
                 $pos = strpos($line, '=');
                 $key = substr($line, 0, $pos);
-                $value = substr($line, $pos+1);
+                $value = substr($line, $pos+1, -2);
 
                 $array[$key] = $value;
             }

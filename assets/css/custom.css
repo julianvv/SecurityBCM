@@ -1,0 +1,21 @@
+body{
+    background-color: #f0f1f2;
+}
+
+nav.bg-custom{
+    background-color: #ace395;
+}
+
+.btn-greentheme {
+    color: #000000;
+    background-color: #abe195;
+}
+
+.btn-greentheme:hover {
+    color: #ffffff;
+    background-color: #5a6268;
+}
+
+.btn-greentheme:focus, .btn-greentheme.focus {
+    box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+}
