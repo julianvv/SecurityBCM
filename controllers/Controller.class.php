@@ -12,20 +12,16 @@ class Controller
     public function login()
     {
         $login_data = Application::$app->request->getBody();
-        $klantnummer = $login_data['klantnummer'];
+        $email = $login_data['email'];
         $wachtwoord = $login_data['wachtwoord'];
-        $array = array();
-        $error = "Dit is geen geldige combinatie.";
+        $array = Array();
 
-        if(Application::$app->ldap->authenticate($klantnummer, $wachtwoord)){
+        if(Application::$app->ldap->authenticate($email, $wachtwoord)){
             $status = true;
         }
 
-
-
-
         $array['status'] = $status ?? false;
-        $array['error'] = $error ?? '';
+        $array['error'] = "Dit is geen geldige combinatie." ?? '';
         die(json_encode($array));
     }
 

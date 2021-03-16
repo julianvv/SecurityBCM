@@ -1,1 +1,5 @@
-<h2>Davey is fucking lekker</h2>
+<form action="">
+    <div class="form-group">
+        <input type="text" class="form-control">
+    </div>
+</form>

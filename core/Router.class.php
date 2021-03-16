@@ -46,8 +46,8 @@ class Router
         $callback = $this->routes[$method][$path] ?? false;
         if(!$callback)
         {
-            $layoutContent = $this->getLayout("mainLayout");
             $_404Content = $this->renderView("_404");
+            $layoutContent = $this->getLayout("mainLayout");
             Application::$app->response->setStatusCode(404);
             return str_replace("{{content}}", $_404Content, $layoutContent);
         }
@@ -62,8 +62,8 @@ class Router
 
     public function generateView($viewName, $layout)
     {
-        $layoutContent = $this->getLayout($layout);
         $viewContent = $this->renderView($viewName);
+        $layoutContent = $this->getLayout($layout);
         return str_replace("{{content}}", $viewContent, $layoutContent);
     }
 
