@@ -28,9 +28,6 @@ class Application
 
         $this->ldap = new Ldap();
         $this->db = new Database();
-        //$this->ldap->authenticate("Julian Dominic", "julianpass123");
-
-
     }
 
     public function run()

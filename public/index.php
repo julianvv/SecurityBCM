@@ -19,19 +19,22 @@ spl_autoload_register(function ($className)
 
 $app = new Application(dirname(__DIR__));
 
-$app->router->get('/', 'login');
+$app->router->get('/', 'home');
 $app->router->get('/intranet', function(){
     echo "intranet";
 });
 
 $app->router->get('/intranet/', '../intranet/index');
 
-$app->router->get('/register', 'register');
+$app->router->post('/login', [controllers\Controller::class, 'login']);
 $app->router->post('/register', [\controllers\RegisterController::class, 'register']);
 
-$app->router->post('/login', [controllers\Controller::class, 'login']);
-$app->router->get('/wachtwoordvergeten', 'resetpassword');
+$app->router->post('/forgotpassword', function (){
+    die(json_encode(array("key" => "lol")));
+});
 
+
+$app->router->post('/getSessionData', [\controllers\SessionController::class, 'getSessionData']);
 
 //Navbar buttons
 $app->router->post('/uitloggen', [controllers\Controller::class, 'logout']);

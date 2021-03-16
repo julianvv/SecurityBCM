@@ -16,12 +16,7 @@ class Session
 
         //Check if session needs to be regenerated
         self::regenerate();
-
-        $flashMessages = $_SESSION[self::FLASH_KEY] ?? [];
-        foreach ($flashMessages as $key => &$flashMessage) {
-            $flashMessage['remove'] = true;
-        }
-        $_SESSION[self::FLASH_KEY] = $flashMessages;
+        $this->removeFlashMessages();
     }
 
     public function setFlash($key, $value)
@@ -69,6 +64,12 @@ class Session
             if ($flashMessage['remove']) {
                 unset($flashMessages[$key]);
             }
+        }
+        $_SESSION[self::FLASH_KEY] = $flashMessages;
+
+        $flashMessages = $_SESSION[self::FLASH_KEY] ?? [];
+        foreach ($flashMessages as $key => &$flashMessage) {
+            $flashMessage['remove'] = true;
         }
         $_SESSION[self::FLASH_KEY] = $flashMessages;
     }

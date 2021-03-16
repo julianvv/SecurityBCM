@@ -1,5 +1,6 @@
 <?php
 use core\Application;
+$app = Application::$app;
 ?>
 
 <!doctype html>
@@ -30,7 +31,7 @@ use core\Application;
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-custom" style="max-height: 8vh;">
     <a class="navbar-brand brand" href="/"><img
-                style="height: 11vh;width: auto; margin: -15px;" src="../../assets/YouthEnergy.png"
+                style="height: 11vh;width: auto; margin: -15px;" src="../../assets/img/YouthEnergy.png"
                 alt="YouthEnergy Logo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,13 +40,13 @@ use core\Application;
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <?php
-        $url = Application::$app->request->getUrl();
-        if($url == "/" && Application::$app->session->get("logged_in")){
-            Application::$app->response->redirect('/verbruiksmeter');
+        $url = $app->request->getUrl();
+        if($url == "/" && $app->session->get("logged_in")){
+            $app->response->redirect('/verbruiksmeter');
         }
 
-        if(($url == "/verbruiksmeter" || $url == "/account") && !Application::$app->session->get("logged_in")){
-            Application::$app->response->redirect('/');
+        if(($url == "/verbruiksmeter" || $url == "/account") && !$app->session->get("logged_in")){
+            $app->response->redirect('/');
         }
 
         if (isset($_SESSION['logged_in'])) {
@@ -72,8 +73,14 @@ use core\Application;
         ?>
     </div>
 </nav>
-<div class="d-flex justify-content-center align-items-center" style="height: 92vh;">
-{{content}}
+
+<div class="d-flex justify-content-center" style="height: 92vh; width: 100vw; background-image: url('../../assets/img/2183826.jpg'); background-repeat: no-repeat;">
+    <div class="d-flex flex-column justify-content-center">
+        <div class="alert <?= $app->session->getFlash('notification')['type'] ?>" <?= $app->session->getFlash('notification') ? '' : "hidden" ?>><?= $app->session->getFlash('notification')['message'] ?></div>
+        <div class="">
+            {{content}}
+        </div>
+    </div>
 </div>
 
 </body>

@@ -21,7 +21,7 @@ class Database
                 self::$pdo = new \PDO($dsn, $username, $password);
                 self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             } catch (\PDOException $e){
-                echo "Error tijdens het verbinden met de database.";
+                Application::$app->session->setFlash('notification', ["type" => "alert-danger", "message" => "Er is een fout opgetreden bij het verbinden met de database."]);
             }
         }
     }
