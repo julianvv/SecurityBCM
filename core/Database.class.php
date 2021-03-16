@@ -18,8 +18,7 @@ class Database
                 $username = $databaseConfig["DB_USER"];
                 $password = $databaseConfig["DB_PASSWORD"];
 
-                self::$pdo = new \PDO($dsn, $username, $password);
-                self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+                self::$pdo = new \PDO($dsn, $username, $password, array(\PDO::ATTR_TIMEOUT => 1, \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
             } catch (\PDOException $e){
                 Application::$app->session->setFlash('notification', ["type" => "alert-danger", "message" => "Er is een fout opgetreden bij het verbinden met de database."]);
             }

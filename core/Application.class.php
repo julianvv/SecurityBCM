@@ -9,6 +9,7 @@ class Application
     public static $config = [];
     public static $ROOT_DIR;
 
+    public $timer;
     public $router;
     public $request;
     public $response;
@@ -16,8 +17,14 @@ class Application
     public $db;
     public $ldap;
 
-    public function __construct($rootDir)
+    //Performance timer
+    public $start;
+    public $end;
+
+    public function __construct($rootDir, $timer)
     {
+        $this->start = hrtime(true);
+        $this->timer = $timer;
         self::$ROOT_DIR = $rootDir;
         self::$app = $this;
         self::$config = LoadEnv::Load($rootDir);

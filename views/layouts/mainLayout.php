@@ -9,7 +9,7 @@ $app = Application::$app;
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="icon" href="../../assets/img/favicon.ico">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../assets/css/bootstrap.css">
     <script src="https://kit.fontawesome.com/6a8e8c04fa.js" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@ $app = Application::$app;
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
+    <?= $app->timer ? sprintf("Time to execute in ms: %f", (hrtime(true) - $app->start)/1e+6) : '' ?>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <?php
         $url = $app->request->getUrl();

@@ -1,5 +1,4 @@
 <?php
-
 use core\Application;
 use core\LoadEnv;
 
@@ -17,7 +16,7 @@ spl_autoload_register(function ($className)
     require "../database/".$className.".class.php";
 });
 
-$app = new Application(dirname(__DIR__));
+$app = new Application(dirname(__DIR__), false);
 
 $app->router->get('/', 'home');
 $app->router->get('/intranet', function(){
@@ -40,15 +39,5 @@ $app->router->post('/getSessionData', [\controllers\SessionController::class, 'g
 $app->router->post('/uitloggen', [controllers\Controller::class, 'logout']);
 $app->router->get('/account', 'account');
 $app->router->get('/verbruiksmeter', 'verbruiksmeter');
-
-
-//meme stuff
-$app->router->get('/password', function (){
-    header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-});
-$app->router->get('/secret/admin_login', function (){
-    header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-});
-
 
 $app->run();
