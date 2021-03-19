@@ -3,6 +3,8 @@
 
 namespace core;
 
+use middleware\AuthMiddleware;
+
 class Application
 {
     public static $app;
@@ -19,7 +21,6 @@ class Application
 
     //Performance timer
     public $start;
-    public $end;
 
     public function __construct($rootDir, $timer)
     {

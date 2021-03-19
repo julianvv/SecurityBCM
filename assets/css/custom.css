@@ -24,3 +24,7 @@ p.p-btn:hover{
     text-decoration: underline;
     cursor: pointer;
 }
+
+input#privacy-statement:checked{
+    background-color: #ace395; !important;
+}

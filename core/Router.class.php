@@ -44,6 +44,7 @@ class Router
         $path = $this->request->getUrl();
         $method = $this->request->getMethod();
         $callback = $this->routes[$method][$path] ?? false;
+
         if(!$callback)
         {
             $_404Content = $this->renderView("_404");
@@ -54,10 +55,12 @@ class Router
 
         if(is_string($callback))
         {
-            return $this->generateView($callback, "mainLayout");
+            return View::view($callback, 'mainLayout');
         }
 
-        return call_user_func($callback);
+        $controller = new $callback[0];
+
+        return $controller->{$callback[1]}();
     }
 
     public function generateView($viewName, $layout)

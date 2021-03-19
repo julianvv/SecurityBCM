@@ -13,7 +13,7 @@
             </div>
             <div class="form-group">
                 <label class="ml-1" for="wachtwoord">Wachtwoord</label>
-                <input type="password" class="form-control" id="wachtwoord" placeholder="Wachtwoord" name="wachtwoord"
+                <input type="password" class="form-control" id="login-wachtwoord" placeholder="Wachtwoord" name="wachtwoord"
                        autocomplete="current-password">
                 <small>
                     <p class="form-text text-muted ml-1 p-btn" onclick="changeForm('forgotpassword-form')">Wachtwoord
@@ -34,7 +34,12 @@
             <div class="form-group">
                 <label class="ml-1" for="klantnummer">Klantnummer</label>
                 <input type="number" class="form-control" id="klantnummer" placeholder="Klantnummer" name="klantnummer">
-                <small id="klantnummerhelp" class="form-text ml-1">Deze kunt u vinden op een van uw facturen.</small>
+                <small id="klantnummerhelp" class="form-text text-muted ml-1">Deze kunt u vinden op een van uw facturen.</small>
+            </div>
+            <div class="form-group">
+                <label class="ml-1" for="postcode">Postcode</label>
+                <input type="text" class="form-control" id="postcode" placeholder="Postcode" name="postcode">
+                <small id="postcodehelp" class="form-text text-muted ml-1">In het format: 1234AB</small>
             </div>
             <div class="form-group">
                 <label class="ml-1" for="email">Email</label>
@@ -42,16 +47,20 @@
             </div>
             <div class="form-group">
                 <label class="ml-1" for="wachtwoord">Wachtwoord</label>
-                <input type="password" class="form-control" id="wachtwoord" placeholder="Wachtwoord" name="password">
+                <input type="password" class="form-control pr-password" id="wachtwoord" placeholder="Wachtwoord" name="password">
+                <small id="klantnummerhelp" class="form-text text-muted ml-1">Minimaal 8 karakters lang, 1 cijfer, 1 speciaal teken en een hoofdletter.</small>
             </div>
             <div class="form-group mb-3">
                 <label class="ml-1" for="wachtwoord-confirm">Wachtwoord Bevestigen</label>
                 <input type="password" class="form-control" id="wachtwoord-confirm" placeholder="Wachtwoord bevestigen"
                        name="password-confirm">
             </div>
-            <button type="submit" class="btn btn-greentheme" id="register-submit">Registreren</button>
-            <button class="btn btn-greentheme float-right" type="button" onclick="changeForm('login-form')">Terug
-            </button>
+            <div class="custom-control custom-checkbox pb-3">
+                <input type="checkbox" class="custom-control-input" id="privacy-statement">
+                <label for="privacy-statement" class="custom-control-label">Ik ga akkoord met <a href="/voorwaarden">voorwaarden</a>.</label>
+            </div>
+            <button class="btn btn-greentheme" type="button" onclick="changeForm('login-form')">Terug</button>
+            <button type="submit" class="btn btn-greentheme float-right" id="register-submit">Registreren</button>
         </form>
 
 
@@ -85,6 +94,13 @@
     function changeForm(form) {
         $("form").attr("hidden", true);
         $("form#" + form).attr("hidden", false);
+        resetErrorBox();
+    }
+
+    function resetErrorBox(){
+        $("div#error-box").text('');
+        $("div#error-box").attr("hidden", true);
+        $("div#error-box").removeClass("alert-danger");
     }
 
     $("button#login-submit").click(function (e) {
@@ -98,9 +114,10 @@
                 if (response.status) {
                     window.location = "/verbruiksmeter";
                 } else {
-                    console.log(response);
-                    $("div#login-feedback").text(response.error);
-                    $("div#login-feedback").css("display", "block");
+                    console.log(response)
+                    $("div#error-box").text(response.error);
+                    $("div#error-box").attr("hidden", false);
+                    $("div#error-box").addClass("alert-danger");
                 }
             }
         });
@@ -115,8 +132,9 @@
             method: 'post',
             success: function (response) {
                 if (!response.status) {
-                    $("div#register-feedback").text(response.error);
-                    $("div#register-feedback").css("display", "block");
+                    $("div#error-box").text(response.error);
+                    $("div#error-box").attr("hidden", false);
+                    $("div#error-box").addClass("alert-danger");
                 }
 
                 if (response.status) {

@@ -3,32 +3,33 @@
 
 namespace controllers;
 
-
-use core\Application;
-use function Sodium\add;
+use middleware\MiddlewareList;
 
 class Controller
 {
-    public function login()
+    private $middlewareList = [];
+    protected $middlewares = [];
+
+    public function __construct()
     {
-        $login_data = Application::$app->request->getBody();
-        $email = $login_data['email'];
-        $wachtwoord = $login_data['wachtwoord'];
-        $array = Array();
-
-        if(Application::$app->ldap->authenticate($email, $wachtwoord)){
-            $status = true;
-        }
-
-        $array['status'] = $status ?? false;
-        $array['error'] = "Dit is geen geldige combinatie." ?? '';
-        die(json_encode($array));
+        $this->middlewareList = (new MiddlewareList())->getMiddleware();
     }
 
-    public function logout()
+    protected function middleware($array)
     {
-        echo "Logging out...";
-        Application::$app->session->destroy();
-        Application::$app->response->redirect('/');
+        foreach ($array as $middleware){
+            array_push($this->middlewares, $middleware);
+        }
+    }
+
+    public function prepareMiddleware()
+    {
+        foreach ($this->middlewares as $middleware) {
+            $object = new $this->middlewareList[$middleware];
+            if(!$object->execute()){
+                return false;
+            }
+        }
+        return true;
     }
 }

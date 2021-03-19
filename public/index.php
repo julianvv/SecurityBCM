@@ -9,35 +9,32 @@ spl_autoload_register(function ($className)
     require dirname(__DIR__)."/".$className.".class.php";
 });
 
-spl_autoload_register(function ($className)
-{
-    $className = str_replace('\\', '/', $className);
-
-    require "../database/".$className.".class.php";
-});
-
 $app = new Application(dirname(__DIR__), false);
 
-$app->router->get('/', 'home');
+$app->router->get('/', [\controllers\AuthPageController::class, 'showLoginPage']);
+$app->router->post('/login', [\controllers\AuthController::class, 'login']);
+$app->router->post('/register', [\controllers\RegisterController::class, 'register']);
+$app->router->get('/verify', [\controllers\AuthPageController::class, 'showVerifyPage']);
+$app->router->get('/letter', [\controllers\AuthPageController::class, 'showLetterPage']);
+
 $app->router->get('/intranet', function(){
     echo "intranet";
 });
-
 $app->router->get('/intranet/', '../intranet/index');
-
-$app->router->post('/login', [controllers\Controller::class, 'login']);
-$app->router->post('/register', [\controllers\RegisterController::class, 'register']);
-
-$app->router->post('/forgotpassword', function (){
-    die(json_encode(array("key" => "lol")));
-});
 
 
 $app->router->post('/getSessionData', [\controllers\SessionController::class, 'getSessionData']);
 
-//Navbar buttons
-$app->router->post('/uitloggen', [controllers\Controller::class, 'logout']);
-$app->router->get('/account', 'account');
-$app->router->get('/verbruiksmeter', 'verbruiksmeter');
 
+
+
+//Navbar buttons
+$app->router->post('/uitloggen', [\controllers\AuthController::class, 'logout']);
+$app->router->get('/account', [\controllers\AuthPageController::class, 'showAccountPage']);
+$app->router->get('/verbruiksmeter', [\controllers\ApplicationController::class, 'showVerbruiksmeter']);
+
+
+
+
+$app->router->get('/login-test', [\controllers\TestController::class, 'test']);
 $app->run();
