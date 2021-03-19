@@ -6,8 +6,13 @@ namespace controllers;
 
 use core\Application;
 
-class SessionController
+class SessionController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function getSessionData(){
         $app = Application::$app;
 

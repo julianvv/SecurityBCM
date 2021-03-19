@@ -19,7 +19,6 @@ class Ldap
                 echo "Error opgetreden";
             }
         }
-        ldap_set_option(self::$conn, LDAP_OPT_PROTOCOL_VERSION, 3);
     }
 
     public function authenticate($mail, $password) : bool
@@ -27,13 +26,14 @@ class Ldap
         $rdn = self::getRDN($mail);
 
         $bind = @ldap_bind(self::$conn, $rdn, $password);
+
         if($bind)
         {
             $stmt = Database::$pdo->prepare("SELECT id, email, permission_role, permission_granted FROM User WHERE email= :email");
             $stmt->bindParam("email", $mail);
             $stmt->execute();
             $_SESSION['logged_in'] = true;
-            $_SESSION['userdata'] = $stmt->fetchAll();
+            $_SESSION['userdata'] = $stmt->fetch();
 
             return true;
         }
@@ -42,6 +42,7 @@ class Ldap
     }
 
     public function register_user($register_data, $user_data){
+        ldap_bind(self::$conn, Application::$config['LDAP_USERNAME'], Application::$config['LDAP_PASSWORD']);
         $rdn = self::createRDN($register_data['klantnummer']);
 
         $fields = Array();
@@ -65,32 +66,45 @@ class Ldap
 
                 $encoded_newPassword = "{CRYPT}". crypt($newPassword, '$6$' . $salt . '$');
             }else{
-                //Geen CRYPT_SHA512 Module (Error?)
+                die(json_encode(array("status" => false, "error" => "Fout bij het versleuten van het wachtwoord.")));
             }
             //Modify user with new password
             $entry = ['userPassword' => $encoded_newPassword];
 
             if(ldap_modify(self::$conn, $rdn, $entry) === false){
-                //Error logica voor het toevoegen van een password
+                die(json_encode(array("status" => false, "error" => "Wachtwoord encryptie niet gelukt.")));
             }
 
         }else{
-            //TODO: Error logica
+            die(json_encode(array("status" => false, "error" => "Account aanmaken is niet gelukt.")));
         }
 
 
         //TODO: Add user to customer group in LDAP
 
         //TODO: Pending status
+
+
         $permission_role = "Klant";
         $permission_granted = 0;
-        $stmt =Application::$app->db->prepare("INSERT INTO User (email, permission_role, k_klantnummer, permission_granted) VALUES (:email, :permission_role, :k_klantnummer, :permission_granted)");
+        $pending = 1;
+        $stmt =Application::$app->db->prepare("INSERT INTO User (email, permission_role, k_klantnummer, permission_granted, pending) VALUES (:email, :permission_role, :k_klantnummer, :permission_granted, :pending)");
         $stmt->bindParam("email", $register_data['email'], \PDO::PARAM_STR);
         $stmt->bindParam("permission_role", $permission_role, \PDO::PARAM_STR);
         $stmt->bindParam("k_klantnummer", $register_data['klantnummer'], \PDO::PARAM_STR);
         $stmt->bindParam("permission_granted", $permission_granted, \PDO::PARAM_INT);
+        $stmt->bindParam("pending", $pending, \PDO::PARAM_INT);
         $stmt->execute();
 
+        $stmt = Application::$app->db->prepare("SELECT id FROM User WHERE k_klantnummer = :klantnummer");
+        $stmt->bindParam("k_klantnummer", $register_data['klantnummer'], \PDO::PARAM_STR);
+        $id = $stmt->fetch()['id'];
+
+        $verify_code = rand(100000000000,999999999999);
+        $stmt = Application::$app->db->prepare("INSERT INTO tbl_klanten_verificatie (v_fk_idKlant, v_code) VALUES (:id, :code)");
+        $stmt->bindParam("id", $id, \PDO::PARAM_INT);
+        $stmt->bindParam("code", $verify_code, \PDO::PARAM_INT);
+        $stmt->execute();
 
         $this->authenticate($register_data['email'], $register_data['password']);
         die(json_encode(array("status" => true, "redirect" => "/")));
@@ -98,11 +112,7 @@ class Ldap
 
     public function exists($email) : bool
     {
-        $filter = "(mail=".ldap_escape($email).")";
-        ldap_bind(self::$conn, Application::$config['LDAP_USERNAME'], Application::$config['LDAP_PASSWORD']);
-        $result = ldap_search(self::$conn, Application::$config['LDAP_BASEDN'], $filter);
-        $result = ldap_get_entries(self::$conn, $result);
-        if($result['count'] != 0){
+        if($this->getRDN($email)){
             return true;
         }
 
@@ -110,11 +120,11 @@ class Ldap
     }
 
     private function getRDN($mail){
-        //ldap_bind();
-        $query = ldap_search(self::$conn, $this->config['LDAP_BASEDN'], "(mail=".ldap_escape($mail).")");
-        $result = ldap_get_entries(self::$conn, $query);
+        ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
+        $query = @ldap_search(self::$conn, $this->config['LDAP_BASEDN'], "(mail=".ldap_escape($mail).")");
+        $result = @ldap_get_entries(self::$conn, $query);
 
-        return $result[0]["dn"];
+        return $result[0]["dn"] ?? false;
     }
 
     private function createRDN($klantnummer)

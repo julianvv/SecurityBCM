@@ -1,15 +1,3 @@
-<!-- Verbruiksmeter Pagina (Check eerst of gebruiker al geverifieerd is) -->
-<?php
-    use \core\Application;
-    $app = Application::$app;
-
-    if($app->session->get('userdata')[0]['permission_granted'] === "0"){
-        $app->session->setFlash('notification', ['type' => 'alert-danger', 'message' => 'Account niet geverifieerd. Doe dit via de account pagina.']);
-        //Show dummy/no data
-    }
-
-?>
-
 <div class="card">
     <div class="card-body">
         <div class="card-header">Lol</div>
