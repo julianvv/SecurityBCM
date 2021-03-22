@@ -28,3 +28,8 @@ p.p-btn:hover{
 input#privacy-statement:checked{
     background-color: #ace395; !important;
 }
+
+div#navbarSupportedContent{
+    float: right;
+    z-index: 1000;
+}

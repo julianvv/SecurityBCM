@@ -24,7 +24,7 @@ class ApplicationController extends Controller
             Application::$app->session->setFlash('notification', ['type' => 'alert-danger', 'message' => 'Verifieer eerst uw account!']);
             return Application::$app->response->redirect('/verify');
         }else{
-            return View::view('verbruiksmeter', 'mainLayout');
+            return View::view('verbruiksmeter', 'mainLayout', ['title' => 'Verbruiksmeter']);
         }
     }
 }

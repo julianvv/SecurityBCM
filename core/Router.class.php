@@ -60,7 +60,7 @@ class Router
 
         $controller = new $callback[0];
 
-        return $controller->{$callback[1]}();
+        return $controller->{$callback[1]}($callback[2] ?? null);
     }
 
     public function generateView($viewName, $layout)

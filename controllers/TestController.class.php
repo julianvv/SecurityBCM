@@ -14,8 +14,17 @@ class TestController extends Controller
         ]);
     }
 
-    public function test()
+    public function loginTest()
     {
-        echo "Je bent ingelogd";
+        if($this->prepareMiddleware()){
+            echo "Ingelogd";
+        }else{
+            echo "Fail";
+        }
+    }
+
+    public function test($test)
+    {
+        var_dump($test);
     }
 }

@@ -15,7 +15,7 @@ $app = Application::$app;
     <link rel="stylesheet" href="../../assets/css/bootstrap.css">
     <script src="https://kit.fontawesome.com/6a8e8c04fa.js" crossorigin="anonymous"></script>
 
-    <title>Hello, world!</title>
+    <title>YE: {{title}}</title>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
@@ -36,7 +36,6 @@ $app = Application::$app;
     <?= $app->timer ? sprintf("Time to execute in ms: %f", (hrtime(true) - $app->start)/1e+6) : '' ?>
 
     <?php if(Application::$app->session->get('logged_in')){ ?>
-
     <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
         <span class='navbar-toggler-icon'></span>
     </button>

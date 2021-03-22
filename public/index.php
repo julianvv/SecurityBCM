@@ -17,6 +17,9 @@ $app->router->post('/register', [\controllers\RegisterController::class, 'regist
 $app->router->get('/verify', [\controllers\AuthPageController::class, 'showVerifyPage']);
 $app->router->get('/letter', [\controllers\AuthPageController::class, 'showLetterPage']);
 
+
+$app->router->get('/test/idk', [\controllers\TestController::class, 'test']);
+
 $app->router->get('/intranet', function(){
     echo "intranet";
 });
@@ -36,5 +39,5 @@ $app->router->get('/verbruiksmeter', [\controllers\ApplicationController::class,
 
 
 
-$app->router->get('/login-test', [\controllers\TestController::class, 'test']);
+$app->router->get('/login-test', [\controllers\TestController::class, 'LoginTest']);
 $app->run();

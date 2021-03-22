@@ -22,7 +22,9 @@ class AuthPageController extends Controller
         if($this->prepareMiddleware()){
             return Application::$app->response->redirect('/verbruiksmeter');
         }else{
-            return View::view('home', 'mainLayout');
+            return View::view('home', 'mainLayout', [
+                'title' => 'Home',
+            ]);
         }
     }
 
@@ -31,7 +33,9 @@ class AuthPageController extends Controller
         if(!$this->prepareMiddleware()){
             return Application::$app->response->redirect('/');
         }else{
-            return View::view('account', 'mainLayout');
+            return View::view('account', 'mainLayout', [
+                'title' => 'Account',
+            ]);
         }
     }
 
@@ -40,18 +44,23 @@ class AuthPageController extends Controller
         if(!$this->prepareMiddleware()){
             return Application::$app->response->redirect('/');
         }else{
-            return View::view('verify', 'mainLayout');
+            return View::view('verify', 'mainLayout', [
+                'title' => 'Verifiëren',
+            ]);
         }
     }
 
     public function showLetterPage()
     {
+        //TODO: Data ophalen uit DB;
+
         if(!$this->prepareMiddleware()){
             return Application::$app->response->redirect('/');
         }else{
             return View::view('letter', 'mainLayout', [
-                'verificatiecode' => '123',
-                'klantnaam' => "Ryan Boersma"
+                'title' => 'Brief',
+                'verificatiecode' => '3210987',
+                'klantnaam' => "Kevin Schiphof"
             ]);
         }
     }
