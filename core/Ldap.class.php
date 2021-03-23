@@ -58,7 +58,7 @@ class Ldap
         $fields['mail'] = $register_data['email'];
 
         //Create LDAP account for user auth
-        $add_user = ldap_add(self::$conn, $rdn, $fields);
+        $add_user = @ldap_add(self::$conn, $rdn, $fields);
 
         if($add_user === true){
             if (CRYPT_SHA512){
@@ -78,7 +78,8 @@ class Ldap
             }
 
         }else{
-            die(json_encode(array("status" => false, "error" => "Account aanmaken is niet gelukt.")));
+            Application::$app->session->setFlash('notification', ["type" => "alert-success", "message" => "U heeft al een account bij YouthEnergy. Login met uw bestaande account."]);
+            die(json_encode(array("status" => true, "redirect" => "/")));
         }
 
         Application::$app->db->register_db_user($register_data);
