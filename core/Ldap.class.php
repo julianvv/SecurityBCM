@@ -42,8 +42,6 @@ class Ldap
     }
 
     public function register_user($register_data, $user_data){
-
-        //Create LDAP account for user auth
         ldap_bind(self::$conn, Application::$config['LDAP_USERNAME'], Application::$config['LDAP_PASSWORD']);
         $rdn = self::createRDN($register_data['klantnummer']);
 
@@ -58,6 +56,7 @@ class Ldap
         $fields['sn'] = $user_data['k_achternaam'];
         $fields['mail'] = $register_data['email'];
 
+        //Create LDAP account for user auth
         $add_user = ldap_add(self::$conn, $rdn, $fields);
 
         if($add_user === true){
@@ -81,11 +80,11 @@ class Ldap
             die(json_encode(array("status" => false, "error" => "Account aanmaken is niet gelukt.")));
         }
 
-
         //TODO: Add user to customer group in LDAP
 
         //TODO: Pending status
 
+        //TODO: Try catch? Error? Revert creation of user.
 
         $permission_role = "Klant";
         $permission_granted = 0;
@@ -98,8 +97,9 @@ class Ldap
         $stmt->bindParam("pending", $pending, \PDO::PARAM_INT);
         $stmt->execute();
 
-        $stmt = Application::$app->db->prepare("SELECT id FROM User WHERE k_klantnummer = :klantnummer");
+        $stmt = Application::$app->db->prepare("SELECT * FROM User WHERE k_klantnummer = :klantnummer");
         $stmt->bindParam("klantnummer", $register_data['klantnummer'], \PDO::PARAM_STR);
+        $stmt->execute();
         $id = $stmt->fetch()['id'];
 
         $verify_code = rand(100000000000,999999999999);
