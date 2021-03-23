@@ -42,6 +42,8 @@ class Ldap
     }
 
     public function register_user($register_data, $user_data){
+
+        //Create LDAP account for user auth
         ldap_bind(self::$conn, Application::$config['LDAP_USERNAME'], Application::$config['LDAP_PASSWORD']);
         $rdn = self::createRDN($register_data['klantnummer']);
 
@@ -97,7 +99,7 @@ class Ldap
         $stmt->execute();
 
         $stmt = Application::$app->db->prepare("SELECT id FROM User WHERE k_klantnummer = :klantnummer");
-        $stmt->bindParam("k_klantnummer", $register_data['klantnummer'], \PDO::PARAM_STR);
+        $stmt->bindParam("klantnummer", $register_data['klantnummer'], \PDO::PARAM_STR);
         $id = $stmt->fetch()['id'];
 
         $verify_code = rand(100000000000,999999999999);
