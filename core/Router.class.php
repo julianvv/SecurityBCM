@@ -47,10 +47,10 @@ class Router
 
         if(!$callback)
         {
-            $_404Content = $this->renderView("_404");
-            $layoutContent = $this->getLayout("mainLayout");
             Application::$app->response->setStatusCode(404);
-            return str_replace("{{content}}", $_404Content, $layoutContent);
+            return View::view('_404', 'mainLayout', [
+                'title' => '404',
+            ]);
         }
 
         if(is_string($callback))
@@ -61,26 +61,5 @@ class Router
         $controller = new $callback[0];
 
         return $controller->{$callback[1]}($callback[2] ?? null);
-    }
-
-    public function generateView($viewName, $layout)
-    {
-        $viewContent = $this->renderView($viewName);
-        $layoutContent = $this->getLayout($layout);
-        return str_replace("{{content}}", $viewContent, $layoutContent);
-    }
-
-    public function renderView($view, $params = [])
-    {
-        ob_start();
-        include_once Application::$ROOT_DIR."/views/$view.php";
-        return ob_get_clean();
-    }
-
-    private function getLayout($layout)
-    {
-        ob_start();
-        include_once Application::$ROOT_DIR."/views/layouts/$layout.php";
-        return ob_get_clean();
     }
 }

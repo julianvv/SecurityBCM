@@ -17,7 +17,6 @@ $app->router->post('/register', [\controllers\RegisterController::class, 'regist
 $app->router->get('/verify', [\controllers\AuthPageController::class, 'showVerifyPage']);
 $app->router->get('/letter', [\controllers\AuthPageController::class, 'showLetterPage']);
 
-
 $app->router->get('/test/idk', [\controllers\TestController::class, 'test']);
 
 $app->router->get('/intranet', function(){
@@ -25,19 +24,12 @@ $app->router->get('/intranet', function(){
 });
 $app->router->get('/intranet/', '../intranet/index');
 
-
 $app->router->post('/getSessionData', [\controllers\SessionController::class, 'getSessionData']);
-
-
-
 
 //Navbar buttons
 $app->router->post('/uitloggen', [\controllers\AuthController::class, 'logout']);
 $app->router->get('/account', [\controllers\AuthPageController::class, 'showAccountPage']);
 $app->router->get('/verbruiksmeter', [\controllers\ApplicationController::class, 'showVerbruiksmeter']);
-
-
-
 
 $app->router->get('/login-test', [\controllers\TestController::class, 'LoginTest']);
 $app->run();

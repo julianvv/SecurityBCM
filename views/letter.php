@@ -2,11 +2,12 @@
     <header class="m-3">
         <address class="client-address">
             {{klantnummer}}<br/>
-            {{klantnaam}}<br/>
-            {{klantadres}}<br/>
+            {{voornaam}} {{achternaam}}<br/>
+            {{straatnaam}} {{huisnummer}}<br/>
+            {{postcode}} {{plaatsnaam}}<br/>
         </address>
 
-        <time datetime="2021-04-21">21 April, 2021</time>
+        <time datetime="2021-04-21">{{datum}}</time>
     </header>
     <div class="card-title ml-2">
         <h2>Betreft:  Verificatie code YouthEnergy</h2>

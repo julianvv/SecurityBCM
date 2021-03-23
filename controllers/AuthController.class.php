@@ -15,15 +15,26 @@ class AuthController extends Controller
 
     public function login()
     {
-        $login_data = Application::$app->request->getBody();
+        $app = Application::$app;
+
+        $login_data = $app->request->getBody();
         $email = $login_data['email'];
         $wachtwoord = $login_data['wachtwoord'];
-        $array = Array();
 
         if (empty($email) || empty($wachtwoord)){
             $error = "Vul beide velden in...";
-        }else if(Application::$app->ldap->authenticate($email, $wachtwoord)){
-            $status = true;
+        }else {
+            if($app->ldap->authenticate($email, $wachtwoord)){
+                if(!$app->db->exists($email)){
+                    $app->db->register_db_user(array(
+                        'email' => $email,
+                        'klantnummer' => $app->ldap->getData($email)['uid'][0],
+                        'password' => $wachtwoord));
+
+                }
+                $status = true;
+            }
+
         }
 
         $array['status'] = $status ?? false;

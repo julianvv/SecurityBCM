@@ -20,7 +20,7 @@ class RegisterController extends Controller
         $register_data = $app->request->getBody();
 
         //Controle of het klantnummer bestaat.
-        $stmt = $app->db->prepare("SELECT klant.k_idKlant, klant.k_klantnummer, klant.k_achternaam, klant.k_voornaam, adres.a_postcode FROM tbl_klanten AS klant INNER JOIN tbl_adressen AS adres WHERE klant.k_klantnummer = :klantnummer AND klant.k_fk_idAdres = adres.a_idAdres");
+        $stmt = $app->db->prepare("SELECT klant.k_idKlant, klant.k_klantnummer, klant.k_achternaam, klant.k_voornaam, adres.a_postcode FROM tbl_klanten AS klant INNER JOIN tbl_adressen AS adres ON klant.k_fk_idAdres = adres.a_idAdres WHERE klant.k_klantnummer = :klantnummer");
         $stmt->bindParam("klantnummer", $register_data['klantnummer'], \PDO::PARAM_INT);
         $stmt->execute();
         $user_data = $stmt->fetch();
@@ -33,18 +33,13 @@ class RegisterController extends Controller
         $stmt = $app->db->prepare("SELECT k_klantnummer FROM User WHERE k_klantnummer = :k_klantnummer");
         $stmt->bindParam("k_klantnummer", $register_data['klantnummer'], \PDO::PARAM_INT);
         $stmt->execute();
-        if($stmt->rowCount() != 0){
+        if($stmt->rowCount() > 0){
             die(json_encode(array("status" => false, "error" => "Dit klantnummer heeft al een account.")));
         }
 
         //Validate Email
         if(!filter_var($register_data['email'], FILTER_VALIDATE_EMAIL)){
             die(json_encode(array("status" => false, "error" => "Email niet valide.")));
-        }
-
-        //Wordt het emailadres al gebruikt door een klant in de ldap?
-        if($app->ldap->exists($register_data['email'])){
-            die(json_encode(array("status" => false, "error" => "Email al in gebruik!")));
         }
 
         if (!filter_var($register_data['password'], FILTER_VALIDATE_REGEXP, array("options"=>array("regexp" => "/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W])\S*$/")))){
@@ -55,6 +50,11 @@ class RegisterController extends Controller
             die(json_encode(array("status" => false, "error" => "Wachtwoorden komen niet overeen.")));
         }
 
-        Application::$app->ldap->register_user($register_data, $user_data);
+        //Wordt het emailadres al gebruikt door een klant in de ldap?
+        if($app->ldap->exists($register_data['email'])){
+            $app->db->register_db_user($register_data, 0);
+        }
+
+        $app->ldap->register_ldap_user($register_data, $user_data);
     }
 }
