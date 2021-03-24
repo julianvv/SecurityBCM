@@ -6,19 +6,20 @@ namespace core;
 
 class View
 {
-    public static function view($name, $layout, $args = [])
+    public static function view($name, $args = [])
     {
-        return self::generateView($name, $layout, $args);
+        return self::generateView($name, $args);
     }
 
-    private static function generateView($viewName, $layout, $args)
+    private static function generateView($viewName, $args)
     {
         $viewContent = self::renderView($viewName);
-        $layoutContent = self::getLayout($layout);
+        $layoutContent = self::getLayout(Application::$app->layout);
         $view = str_replace("{{content}}", $viewContent, $layoutContent);
 
         foreach ($args as $variable => $value) {
-            $view = str_replace("{{{$variable}}}", $value, $view);
+            $view = str_replace("{{{$variable}}}", htmlspecialchars($value), $view);
+            $view = str_replace("{!!{$variable}!!}", $value, $view);
         }
 
         $view = self::clearPlaceholders($view);
@@ -27,13 +28,16 @@ class View
     }
 
     private static function clearPlaceholders($content){
+        $content = preg_replace("/{!!\w*!!}/", "", $content);
         return preg_replace("/{{\w*}}/", "", $content);
     }
 
-    private static function renderView($view, $params = [])
+    private static function renderView($view)
     {
+        $viewName = str_replace(".", "/", $view);
+
         ob_start();
-        include_once Application::$ROOT_DIR."/views/$view.php";
+        include_once Application::$ROOT_DIR."/views/$viewName.php";
         return ob_get_clean();
     }
 

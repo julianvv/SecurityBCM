@@ -28,34 +28,35 @@ $app = Application::$app;
     <link rel="stylesheet" href="../../assets/css/custom.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-custom" style="max-height: 8vh;">
+<nav class="navbar navbar-expand-lg navbar-dark employee-bg" style="max-height: 8vh;">
     <a class="navbar-brand brand" href="/"><img
-                style="height: 11vh;width: auto; margin: -15px;" src="../../assets/img/YouthEnergy.png"
-                alt="YouthEnergy Logo"></a>
+            style="height: 11vh;width: auto; margin: -15px;" src="../../assets/img/YouthEnergy.png"
+            alt="YouthEnergy Logo"></a>
 
     <?= $app->timer ? sprintf("Time to execute in ms: %f", (hrtime(true) - $app->start)/1e+6) : '' ?>
 
-    <?php if(Application::$app->session->get('logged_in')){ ?>
     <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
         <span class='navbar-toggler-icon'></span>
     </button>
-    <div class='collapse navbar-collapse' id='navbarSupportedContent'>
-        <ul class='navbar-nav mr-auto'>
-            <li class='nav-item mr-2'>
-                <a class='btn btn-greentheme' href='/account'>Account</a>
-            </li>
-            <li class='nav-item mr-2'>
-                <a class='btn btn-greentheme' href='/verbruiksmeter'>Verbruiksmeter</a>
-            </li>
-        </ul>
-        <ul class='navbar-nav'>
-            <li class='nav-item mr-2'>
-                <form action='/uitloggen' method='post'>
-                    <button class='btn btn-greentheme' type='submit'>Uitloggen</button>
-                </form>
-            </li>
-        </ul>
-    </div>
+    <?php if(Application::$app->session->get('logged_in')){ ?>
+
+        <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+            <ul class='navbar-nav mr-auto'>
+                <li class='nav-item mr-2'>
+                    <a class='btn btn-greentheme' href='/account'>Account</a>
+                </li>
+                <li class='nav-item mr-2'>
+                    <a class='btn btn-greentheme' href='/verbruiksmeter'>Verbruiksmeter</a>
+                </li>
+            </ul>
+            <ul class='navbar-nav'>
+                <li class='nav-item mr-2'>
+                    <form action='/uitloggen' method='post'>
+                        <button class='btn btn-greentheme' type='submit'>Uitloggen</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     <?php } ?>
 </nav>
 

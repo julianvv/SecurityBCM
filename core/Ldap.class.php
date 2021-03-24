@@ -23,7 +23,7 @@ class Ldap
 
     public function authenticate($mail, $password) : bool
     {
-        $rdn = self::getData($mail)['dn'];
+        $rdn = self::getDataByMail($mail)['dn'];
 
         $bind = @ldap_bind(self::$conn, $rdn, $password);
 
@@ -85,18 +85,26 @@ class Ldap
         Application::$app->db->register_db_user($register_data);
     }
 
-    public function exists($email) : bool
+    public function exists($string) : bool
     {
-        if($this->getData($email)){
+        if($this->getDataByMail($string) || $this->getDataByUID($string)){
             return true;
         }
 
         return false;
     }
 
-    public function getData($mail){
+    public function getDataByMail($mail){
         ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
         $query = @ldap_search(self::$conn, $this->config['LDAP_BASEDN'], "(mail=".ldap_escape($mail).")");
+        $result = @ldap_get_entries(self::$conn, $query);
+
+        return $result[0] ?? false;
+    }
+
+    public function getDataByUID($uid){
+        ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
+        $query = @ldap_search(self::$conn, $this->config['LDAP_BASEDN'], "(uid=".ldap_escape($uid).")");
         $result = @ldap_get_entries(self::$conn, $query);
 
         return $result[0] ?? false;

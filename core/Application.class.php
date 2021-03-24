@@ -18,6 +18,7 @@ class Application
     public $session;
     public $db;
     public $ldap;
+    public $layout;
 
     //Performance timer
     public $start;

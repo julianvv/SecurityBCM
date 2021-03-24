@@ -11,6 +11,7 @@ class ApplicationController extends Controller
 {
     public function __construct()
     {
+        Application::$app->layout = 'customerLayout';
         parent::__construct();
         $this->middleware([
             'auth',
@@ -24,7 +25,7 @@ class ApplicationController extends Controller
             Application::$app->session->setFlash('notification', ['type' => 'alert-danger', 'message' => 'Verifieer eerst uw account!']);
             return Application::$app->response->redirect('/verify');
         }else{
-            return View::view('verbruiksmeter', 'mainLayout', ['title' => 'Verbruiksmeter']);
+            return View::view('verbruiksmeter', ['title' => 'Verbruiksmeter']);
         }
     }
 }

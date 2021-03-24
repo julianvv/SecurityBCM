@@ -8,7 +8,7 @@ class Request
 {
     public function getUrl()
     {
-        $path = $_SERVER['REQUEST_URI'];
+        $path = rtrim($_SERVER['REQUEST_URI'], '/');
         $pos = strpos($path, '?');
         if ($pos !== false)
         {

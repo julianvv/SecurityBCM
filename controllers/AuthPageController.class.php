@@ -11,6 +11,7 @@ class AuthPageController extends Controller
 {
     public function __construct()
     {
+        Application::$app->layout = "customerLayout";
         parent::__construct();
         $this->middleware([
             'auth',
@@ -22,7 +23,7 @@ class AuthPageController extends Controller
         if($this->prepareMiddleware()){
             return Application::$app->response->redirect('/verbruiksmeter');
         }else{
-            return View::view('home', 'mainLayout', [
+            return View::view('home', [
                 'title' => 'Home',
             ]);
         }
@@ -33,7 +34,7 @@ class AuthPageController extends Controller
         if(!$this->prepareMiddleware()){
             return Application::$app->response->redirect('/');
         }else{
-            return View::view('account', 'mainLayout', [
+            return View::view('account', [
                 'title' => 'Account',
             ]);
         }
@@ -44,7 +45,7 @@ class AuthPageController extends Controller
         if(!$this->prepareMiddleware()){
             return Application::$app->response->redirect('/');
         }else{
-            return View::view('verify', 'mainLayout', [
+            return View::view('verify', [
                 'title' => 'Verifiëren',
             ]);
         }
@@ -81,7 +82,7 @@ class AuthPageController extends Controller
 
             $data['title'] = 'Brief';
 
-            return View::view('letter', 'mainLayout', $data);
+            return View::view('letter', $data);
         }
     }
 }

@@ -1,10 +1,16 @@
+nav.employee-bg{
+    background-color: #4792d2;
+}
+
+nav.customer-bg{
+    background-color: #ace395;
+}
+
 body{
     background-color: #f0f1f2;
 }
 
-nav.bg-custom{
-    background-color: #ace395;
-}
+
 
 .btn-greentheme {
     color: #000000;

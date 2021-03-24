@@ -48,7 +48,7 @@ class Router
         if(!$callback)
         {
             Application::$app->response->setStatusCode(404);
-            return View::view('_404', 'mainLayout', [
+            return View::view('_404', [
                 'title' => '404',
             ]);
         }

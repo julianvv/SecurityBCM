@@ -30,11 +30,9 @@ class AuthController extends Controller
                         'email' => $email,
                         'klantnummer' => $app->ldap->getData($email)['uid'][0],
                         'password' => $wachtwoord));
-
                 }
                 $status = true;
             }
-
         }
 
         $array['status'] = $status ?? false;
