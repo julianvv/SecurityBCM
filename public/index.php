@@ -11,13 +11,15 @@ spl_autoload_register(function ($className)
 
 $app = new Application(dirname(__DIR__), false);
 
-$app->router->get('', [\controllers\AuthPageController::class, 'showLoginPage']);
+$app->router->get('', [\controllers\ApplicationController::class, 'showLoginPage']);
+$app->router->get('/', [\controllers\ApplicationController::class, 'showLoginPage']);
 
 $app->router->post('/login', [\controllers\AuthController::class, 'login']);
 $app->router->post('/register', [\controllers\RegisterController::class, 'register']);
 
-$app->router->get('/verify', [\controllers\AuthPageController::class, 'showVerifyPage']);
-$app->router->get('/letter', [\controllers\AuthPageController::class, 'showLetterPage']);
+$app->router->get('/verify', [\controllers\AuthTermsController::class, 'showVerifyPage']);
+$app->router->get('/akkoord', [\controllers\AuthPageController::class, 'showAkkoordPage']);
+$app->router->get('/letter', [\controllers\AuthTermsController::class, 'showLetterPage']);
 
 //Intranet pagina's
 $app->router->get('/intranet', [\controllers\IntranetController::class, 'showIndex']);
@@ -27,7 +29,7 @@ $app->router->post('/getSessionData', [\controllers\SessionController::class, 'g
 
 //Navbar buttons
 $app->router->post('/uitloggen', [\controllers\AuthController::class, 'logout']);
-$app->router->get('/account', [\controllers\AuthPageController::class, 'showAccountPage']);
+$app->router->get('/account', [\controllers\AuthTermsController::class, 'showAccountPage']);
 $app->router->get('/verbruiksmeter', [\controllers\ApplicationController::class, 'showVerbruiksmeter']);
 
 $app->router->get('/login-test', [\controllers\TestController::class, 'LoginTest']);

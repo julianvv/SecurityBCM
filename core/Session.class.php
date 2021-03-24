@@ -16,7 +16,6 @@ class Session
 
         //Check if session needs to be regenerated
         self::regenerate();
-
     }
 
     public function setFlash($key, $value)

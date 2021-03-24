@@ -15,13 +15,28 @@ class ApplicationController extends Controller
         parent::__construct();
         $this->middleware([
             'auth',
-            'permission'
+            'terms',
+            'permission',
         ]);
+    }
+
+    public function showLoginPage()
+    {
+        if($this->prepareMiddleware()){
+            return Application::$app->response->redirect('/verbruiksmeter');
+        }else{
+            return View::view('home', [
+                'title' => 'Home',
+            ]);
+        }
     }
 
     public function showVerbruiksmeter()
     {
         if(!$this->prepareMiddleware()){
+            if($this->failed[0] === "terms"){
+                return Application::$app->response->redirect('/akkoord');
+            }
             Application::$app->session->setFlash('notification', ['type' => 'alert-danger', 'message' => 'Verifieer eerst uw account!']);
             return Application::$app->response->redirect('/verify');
         }else{

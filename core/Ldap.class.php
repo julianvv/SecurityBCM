@@ -29,11 +29,8 @@ class Ldap
 
         if($bind)
         {
-            $stmt = Database::$pdo->prepare("SELECT * FROM User WHERE email= :email");
-            $stmt->bindParam("email", $mail);
-            $stmt->execute();
             $_SESSION['logged_in'] = true;
-            $_SESSION['userdata'] = $stmt->fetch();
+            Application::$app->db->fetchByEmail($mail);
 
             return true;
         }

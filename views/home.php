@@ -2,7 +2,7 @@
     <div class="card-body">
 
 
-        <form id="login-form">
+        <form method="post"  id="login-form">
             <h3 class="card-title">Inloggen</h3>
             <p class="card-text">Login met uw emailadres</p>
             <div id="login-feedback" class="invalid-feedback ml-1"></div>
@@ -27,7 +27,7 @@
         </form>
 
 
-        <form id="register-form" hidden>
+        <form method="post" id="register-form" hidden>
             <h3 class="card-title">Registreren</h3>
             <p class="card-text">Registreren is alleen mogelijk indien u al klant bij ons bent.</p>
             <div id="register-feedback" class="invalid-feedback ml-1"></div>
@@ -64,7 +64,7 @@
         </form>
 
 
-        <form id="forgotpassword-form" hidden>
+        <form method="post"  id="forgotpassword-form" hidden>
             <h3 class="card-title">Wachtwoord herstellen</h3>
             <p class="card-text">Na het invullen van uw email en klantnummer zullen wij u een reset-link sturen.</p>
             <div id="resetpassword-feedback" class="valid-feedback"></div>

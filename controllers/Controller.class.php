@@ -8,6 +8,7 @@ use middleware\MiddlewareList;
 class Controller
 {
     private $middlewareList = [];
+    protected $failed = [];
     protected $middlewares = [];
 
     public function __construct()
@@ -27,6 +28,7 @@ class Controller
         foreach ($this->middlewares as $middleware) {
             $object = new $this->middlewareList[$middleware];
             if(!$object->execute()){
+                array_push($this->failed, $middleware);
                 return false;
             }
         }

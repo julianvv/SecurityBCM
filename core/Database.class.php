@@ -36,8 +36,6 @@ class Database
 
     public function register_db_user($register_data, $new = 1)
     {
-        //TODO: Add user to customer group in LDAP
-
         //TODO: Pending status
 
         //TODO: Try catch? Error? Revert creation of user.
@@ -45,7 +43,7 @@ class Database
         $permission_role = "Klant";
         $permission_granted = 0;
         $pending = 1;
-        $stmt =Application::$app->db->prepare("INSERT INTO User (email, permission_role, k_klantnummer, permission_granted, pending) VALUES (:email, :permission_role, :k_klantnummer, :permission_granted, :pending)");
+        $stmt = Application::$app->db->prepare("INSERT INTO User (email, permission_role, k_klantnummer, permission_granted, pending) VALUES (:email, :permission_role, :k_klantnummer, :permission_granted, :pending)");
         $stmt->bindParam("email", $register_data['email'], \PDO::PARAM_STR);
         $stmt->bindParam("permission_role", $permission_role, \PDO::PARAM_STR);
         $stmt->bindParam("k_klantnummer", $register_data['klantnummer'], \PDO::PARAM_STR);
@@ -82,5 +80,21 @@ class Database
             return true;
         }
         return false;
+    }
+
+    public function fetchByEmail($email)
+    {
+        //Fetch userdata by email
+        $stmt = Database::$pdo->prepare("SELECT * FROM User WHERE email= :email");
+        $stmt->bindParam("email", $email);
+        $stmt->execute();
+        $data = $stmt->fetch();
+        Application::$app->session->set('userdata', $data);
+    }
+
+    public function refreshSession()
+    {
+        $email = Application::$app->session->get('userdata')['email'] ?? false;
+        self::fetchByEmail($email);
     }
 }

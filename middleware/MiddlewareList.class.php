@@ -15,6 +15,7 @@ class MiddlewareList
         $this->middleware = array(
             'auth' => AuthMiddleware::class,
             'permission' => PermMiddleware::class,
+            'terms' => TermsMiddleware::class
         );
     }
 
