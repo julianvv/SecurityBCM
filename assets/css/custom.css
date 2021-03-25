@@ -1,3 +1,13 @@
+body{
+    background-color: #f0f1f2;
+    overflow: hidden;
+}
+
+div#navbarSupportedContent{
+    float: right;
+    z-index: 1000;
+}
+
 nav.employee-bg{
     background-color: #4792d2;
 }
@@ -6,11 +16,43 @@ nav.customer-bg{
     background-color: #ace395;
 }
 
-body{
-    background-color: #f0f1f2;
+.main-col {
+    height: 92vh;
+    background-image: url('../../assets/img/2183826.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
 }
 
+.main-row {
+    min-width: 33%;
+    max-height: 92vh;
+    padding-top: 2%;
+}
 
+.home-wrapper {
+    min-width: 30%;
+    height: auto;
+}
+
+.login-wrapper {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.formcard {
+    width: 100%;
+}
+
+div#error-box{
+    text-align: center;
+    overflow-y: auto;
+    font-size: clamp(1.2rem, 1.4vmax, 1.6rem);
+    max-height: 15%;
+    z-index: 1001;
+    max-width: 80%;
+    margin: 0 auto;
+}
 
 .btn-greentheme {
     color: #000000;
@@ -31,11 +73,95 @@ p.p-btn:hover{
     cursor: pointer;
 }
 
-input#privacy-statement:checked{
-    background-color: #ace395; !important;
+@media screen and (max-width: 1921px){
+    .home-wrapper{
+        max-width: 60%;
+    }
 }
 
-div#navbarSupportedContent{
-    float: right;
-    z-index: 1000;
+@media screen and (max-width: 1400px){
+    .home-wrapper{
+        max-width: 70%;
+    }
 }
+
+@media screen and (max-width: 1200px){
+    .home-wrapper{
+        max-width: 75%;
+    }
+}
+
+@media screen and (max-width: 992px){
+    .home-wrapper{
+        max-width: 80%;
+    }
+}
+
+@media screen and (max-width: 768px){
+    .home-wrapper{
+        max-width: 80%;
+    }
+}
+
+@media screen and (max-width: 575px){
+    .home-wrapper{
+        max-width: 85%;
+    }
+}
+
+@media screen and (max-width: 320px){
+    .home-wrapper{
+        max-width: 98%;
+    }
+}
+
+/*
+SCROLLBARS
+*/
+.loginpage::-webkit-scrollbar {
+    display: block;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.loginpage {
+    border-radius: 3%;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow-y: auto;
+
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+}
+::-webkit-scrollbar-thumb {
+    background: #393a3c;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #000000;
+}
+::-webkit-scrollbar-thumb:active {
+    background: #000000;
+}
+::-webkit-scrollbar-track {
+    background: white;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+    background: white;
+}
+::-webkit-scrollbar-track:active {
+    background: white;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+
