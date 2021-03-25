@@ -62,15 +62,21 @@ $app = Application::$app;
         </div>
     <?php } ?>
 </nav>
-
-
-<div class="d-flex flex-column justify-content-center main-col">
-    <div id="error-box"
-         class="alert <?= $app->session->getFlash('notification')['type'] ?>" <?= $app->session->getFlash('notification') ? '' : "hidden" ?>>
-        <p class="error-text"><?= $app->session->getFlash('notification')['message'] ?></p></div>
-    <div class="d-flex justify-content-center main-row">
-        {{content}}
-    </div>
+<div id="error-box"
+     class="alert <?= $app->session->getFlash('notification')['type'] ?>" <?= $app->session->getFlash('notification') ? '' : "hidden" ?>>
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true" onclick="hideError()">&times;</span>
+    </button>
+    <p class="error-text"><?= $app->session->getFlash('notification')['message'] ?></p>
 </div>
+<div class="background">
+    {{content}}
+</div>
+<script>
+    function hideError() {
+        $("div#error-box").css('display', 'none');
+    }
+</script>
+
 </body>
 </html>

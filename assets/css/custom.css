@@ -3,6 +3,13 @@ body{
     overflow: hidden;
 }
 
+.background {
+    background-image: url('../../assets/img/2183826.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 92vh;
+}
+
 div#navbarSupportedContent{
     float: right;
     z-index: 1000;
@@ -18,40 +25,32 @@ nav.customer-bg{
 
 .main-col {
     height: 92vh;
-    background-image: url('../../assets/img/2183826.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 100%;
 }
 
 .main-row {
-    min-width: 33%;
     max-height: 92vh;
-    padding-top: 2%;
-}
-
-.home-wrapper {
-    min-width: 30%;
-    height: auto;
 }
 
 .login-wrapper {
-    max-width: 80%;
-    margin: 0 auto;
+    min-width: 33%;
+    max-width: 98%;
+    margin: 4% 0 4% 0;
 }
 
-.formcard {
-    width: 100%;
+.home-card{
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 div#error-box{
+    position: fixed;
+    top: 9vh;
+    left: 10vw;
+    right: 10vw;
     text-align: center;
-    overflow-y: auto;
     font-size: clamp(1.2rem, 1.4vmax, 1.6rem);
-    max-height: 15%;
     z-index: 1001;
     max-width: 80%;
-    margin: 0 auto;
 }
 
 .btn-greentheme {
@@ -73,45 +72,58 @@ p.p-btn:hover{
     cursor: pointer;
 }
 
-@media screen and (max-width: 1921px){
-    .home-wrapper{
-        max-width: 60%;
+@media screen and (max-width: 2560px){
+    .login-wrapper{
+        max-width: 35%;
+    }
+}
+
+@media screen and (max-width: 2560px){
+    .login-wrapper{
+        max-width: 35%;
+    }
+}
+
+@media screen and (max-width: 1920px){
+    .login-wrapper{
+        max-width: 35%;
     }
 }
 
 @media screen and (max-width: 1400px){
-    .home-wrapper{
-        max-width: 70%;
+    .login-wrapper{
+        max-width: 45%;
     }
 }
 
 @media screen and (max-width: 1200px){
-    .home-wrapper{
-        max-width: 75%;
+    .login-wrapper{
+        max-width: 50%;
     }
 }
 
 @media screen and (max-width: 992px){
-    .home-wrapper{
-        max-width: 80%;
+    .login-wrapper{
+        max-width: 65%;
     }
 }
 
 @media screen and (max-width: 768px){
-    .home-wrapper{
+    .login-wrapper{
         max-width: 80%;
     }
 }
 
 @media screen and (max-width: 575px){
-    .home-wrapper{
-        max-width: 85%;
+    .login-wrapper{
+        max-width: 90%;
+        margin: 8% 0 8% 0;
     }
 }
 
 @media screen and (max-width: 320px){
-    .home-wrapper{
-        max-width: 98%;
+    .login-wrapper{
+        max-width: 95%;
     }
 }
 
@@ -127,8 +139,6 @@ SCROLLBARS
     border-radius: 3%;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
-    overflow-y: auto;
-
 }
 
 ::-webkit-scrollbar {
