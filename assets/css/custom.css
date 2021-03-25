@@ -66,6 +66,7 @@ div#error-box{
     font-size: clamp(1.2rem, 1.4vmax, 1.6rem);
     z-index: 1001;
     max-width: 80%;
+    display: none;
 }
 
 .btn-greentheme {

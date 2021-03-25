@@ -61,7 +61,7 @@ $app = Application::$app;
 </nav>
 
 <div id="error-box"
-     class="alert <?= $app->session->getFlash('notification')['type'] ?>" <?= $app->session->getFlash('notification') ? '' : "hidden" ?>>
+     class="alert <?= $app->session->getFlash('notification')['type'] ?>">
     <button type="button" class="close" aria-label="Close">
         <span aria-hidden="true" onclick="hideError()">&times;</span>
     </button>
