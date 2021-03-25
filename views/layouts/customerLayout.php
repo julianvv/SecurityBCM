@@ -31,9 +31,9 @@ $app = Application::$app;
     <link rel="stylesheet" href="../../assets/css/custom.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark customer-bg" style="max-height: 8vh;">
+<nav class="navbar navbar-expand-lg navbar-dark customer-bg" style="height: 8vh;">
     <a class="navbar-brand brand" href="/"><img
-                style="height: 11vh;width: auto; margin: -15px;" src="../../assets/img/YouthEnergy.png"
+                src="../../assets/img/YouthEnergy.png"
                 alt="YouthEnergy Logo"></a>
 
     <?= $app->timer ? sprintf("Time to execute in ms: %f", (hrtime(true) - $app->start) / 1e+6) : '' ?>

@@ -1,8 +1,6 @@
 <div class="d-flex flex-column justify-content-center main-col">
     <div class="d-flex justify-content-center main-row">
         <div class="login-wrapper">
-
-
             <div class="card border border-success home-card">
                 <div class="card-body loginpage">
                     <form method="post" id="login-form">

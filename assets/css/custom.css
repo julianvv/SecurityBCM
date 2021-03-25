@@ -3,6 +3,14 @@ body{
     overflow: hidden;
 }
 
+.width-spacing{
+    max-width: 96vw;
+}
+
+.height-spacing {
+    margin: 4% 0;
+}
+
 .background {
     background-image: url('../../assets/img/2183826.jpg');
     background-size: cover;
@@ -13,6 +21,13 @@ body{
 div#navbarSupportedContent{
     float: right;
     z-index: 1000;
+}
+
+nav a.brand img{
+    height: 10vh;
+    position: fixed;
+    left: -2px;
+    top: -6px;
 }
 
 nav.employee-bg{
@@ -111,19 +126,28 @@ p.p-btn:hover{
 @media screen and (max-width: 768px){
     .login-wrapper{
         max-width: 80%;
+        margin: 4% 0 20% 0;
     }
 }
 
 @media screen and (max-width: 575px){
     .login-wrapper{
         max-width: 90%;
-        margin: 8% 0 8% 0;
+        margin: 4% 0 20% 0;
+    }
+}
+
+@media screen and (max-width: 384px) and (max-height: 854px){
+    .login-wrapper{
+        max-width: 90%;
+        margin: 4% 0 30% 0;
     }
 }
 
 @media screen and (max-width: 320px){
     .login-wrapper{
         max-width: 95%;
+        margin: 4% 0 20% 0;
     }
 }
 
@@ -175,3 +199,137 @@ SCROLLBARS
 }
 
 
+/* Verbruiksmeter: Ryan */
+.header-stroom {
+    color: white;
+    font-size: 100%;
+    background: url("/assets/img/stroom.jpg");
+    background-size: cover;
+    padding: 0px;
+    text-align: center;
+}
+
+.header-gas {
+    color: white;
+    font-size: 100%;
+    background: url("/assets/img/gasplaatje.jpg");
+    background-size: cover;
+    padding: 0px;
+    text-align: center;
+}
+
+.header-eigen {
+    color: white;
+    font-size: 100%;
+    background: url("/assets/img/groenestroom.jpg");
+    background-size: cover;
+    padding: 0px;
+    text-align: center;
+}
+
+.verbruiksmeter-header {
+    background-color: #6aa84f;
+}
+
+.vebruiksmeter-cardbody {
+    background-color: #d9ead3;
+}
+
+.energie-kaart {
+    border-color: black;
+    margin: 1%;
+    height: 33%;
+}
+
+.landelijk-button {
+    width: 100%;
+    color: white;
+    font-size: 100%;
+    background-color: #6aa84f;
+    border-color: black;
+    border-radius: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 5%;
+    font-weight: bolder;
+}
+
+.lokaal-button {
+    width: 100%;
+    color: white;
+    font-size: 100%;
+    background-color: #6aa84f;
+    border-color: black;
+    border-radius: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 5%;
+    font-weight: bolder;
+}
+
+.Locatie-Afbeelding {
+    width: 80%;
+    border-radius: 5%;
+}
+
+.card-vergelijken {
+    text-align: center;
+    border-color: black;
+    margin: 1%;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+.card-verbruik {
+    text-align: center;
+    border-color: black;
+    margin: 1%;
+    height: 90vh;
+    overflow-y: auto;
+}
+
+.verbruiksmeter-card {
+    margin-bottom: 1%;
+}
+
+.accordion-provinciaal {
+    background-color: #6aa84f;
+    color: white;
+    cursor: pointer;
+    padding: 5%;
+    width: 100%;
+    font-size: 100%;
+    transition: 0.4s;
+    border-color: black;
+    border-radius: 5%;
+    font-weight: bolder;
+}
+
+.panel {
+    display: none;
+    background-color: #d9ead3;
+    overflow: hidden;
+}
+
+.provincie-button {
+    width: 100%;
+    background-color: #ace395;
+    color: gray;
+    border-radius: 5%;
+    margin: 0.5%;
+    font-weight: bolder;
+}
+
+.scrollable{
+    max-height: 92vh;
+    overflow-y: auto;
+}
+
+.invis-scrollbar{
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.invis-scrollbar::-webkit-scrollbar {
+    display: none;
+}

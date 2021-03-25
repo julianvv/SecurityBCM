@@ -20,6 +20,7 @@ $app->router->post('/register', [\controllers\RegisterController::class, 'regist
 $app->router->get('/verify', [\controllers\AuthTermsController::class, 'showVerifyPage']);
 $app->router->get('/akkoord', [\controllers\AuthPageController::class, 'showAkkoordPage']);
 $app->router->get('/letter', [\controllers\AuthTermsController::class, 'showLetterPage']);
+$app->router->get('/voorwaarden', [\controllers\ApplicationController::class, 'showVoorwaardenPage']);
 
 //Intranet pagina's
 $app->router->get('/intranet', [\controllers\IntranetController::class, 'showIndex']);

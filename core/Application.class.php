@@ -40,7 +40,6 @@ class Application
         $this->response = new Response();
 
         $this->db->refreshSession();
-        $this->session->setFlash("notification", ["type"=>"alert-danger","message"=>"Jo, je hebt geen verbinding met de database bitch. Ik weet niet wat ik moet doen *sadface*"]);
     }
 
     public function run()

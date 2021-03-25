@@ -20,6 +20,10 @@ class ApplicationController extends Controller
         ]);
     }
 
+    public function showVoorwaardenPage(){
+        return View::view('voorwaarden', ['title' => 'Voorwaarden']);
+    }
+
     public function showLoginPage()
     {
         if($this->prepareMiddleware()){

@@ -28,10 +28,10 @@ $app = Application::$app;
     <link rel="stylesheet" href="../../assets/css/custom.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark employee-bg" style="max-height: 8vh;">
+<nav class="navbar navbar-expand-lg navbar-dark employee-bg" style="height: 8vh;">
     <a class="navbar-brand brand" href="/"><img
-            style="height: 11vh;width: auto; margin: -15px;" src="../../assets/img/YouthEnergy.png"
-            alt="YouthEnergy Logo"></a>
+                src="../../assets/img/YouthEnergy.png"
+                alt="YouthEnergy Logo"></a>
 
     <?= $app->timer ? sprintf("Time to execute in ms: %f", (hrtime(true) - $app->start)/1e+6) : '' ?>
 
@@ -60,18 +60,15 @@ $app = Application::$app;
     <?php } ?>
 </nav>
 
-<div class="d-flex flex-column justify-content-center main-col">
-
-    <div class="d-flex justify-content-center main-row">
-        <div id="error-box"
-             class="alert <?= $app->session->getFlash('notification')['type'] ?>" <?= $app->session->getFlash('notification') ? '' : "hidden" ?>>
-            <button type="button" class="close" aria-label="Close">
-                <span aria-hidden="true" onclick="hideError()">&times;</span>
-            </button>
-            <p class="error-text"><?= $app->session->getFlash('notification')['message'] ?></p>
-        </div>
-        {{content}}
-    </div>
+<div id="error-box"
+     class="alert <?= $app->session->getFlash('notification')['type'] ?>" <?= $app->session->getFlash('notification') ? '' : "hidden" ?>>
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true" onclick="hideError()">&times;</span>
+    </button>
+    <p class="error-text"><?= $app->session->getFlash('notification')['message'] ?></p>
+</div>
+<div class="background">
+    {{content}}
 </div>
 
 <script>
