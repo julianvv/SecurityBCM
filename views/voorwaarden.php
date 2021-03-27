@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-center main-row">
         <div class="container text-center">
             <h1>Voorwaarden</h1>
-            <p>je kkr moeder</p>
+            <p>Blablabla...</p>
         </div>
     </div>
 </div>

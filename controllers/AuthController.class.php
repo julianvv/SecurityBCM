@@ -28,7 +28,7 @@ class AuthController extends Controller
                 if(!$app->db->exists($email)){
                     $app->db->register_db_user(array(
                         'email' => $email,
-                        'klantnummer' => $app->ldap->getData($email)['uid'][0],
+                        'klantnummer' => $app->ldap->getDataByMail($email)['uid'][0],
                         'password' => $wachtwoord));
                 }
                 $status = true;

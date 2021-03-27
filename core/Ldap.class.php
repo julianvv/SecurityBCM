@@ -82,26 +82,38 @@ class Ldap
         Application::$app->db->register_db_user($register_data);
     }
 
-    public function exists($string) : bool
+    public function exists($string, $type) : bool
     {
-        if($this->getDataByMail($string) || $this->getDataByUID($string)){
+        if($this->getDataByMail($string, $type) || $this->getDataByUID($string, $type)){
             return true;
         }
 
         return false;
     }
 
-    public function getDataByMail($mail){
+    public function getDataByMail($mail, $type){
+        if($type == 'klant'){
+            $dn = $this->config['LDAP_BASEDN'];
+        }else{
+            $dn = $this->config['LDAP_EMPLOYEEDN'];
+        }
+
         ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
-        $query = @ldap_search(self::$conn, $this->config['LDAP_BASEDN'], "(mail=".ldap_escape($mail).")");
+        $query = @ldap_search(self::$conn, $dn, "(mail=".ldap_escape($mail).")");
         $result = @ldap_get_entries(self::$conn, $query);
 
         return $result[0] ?? false;
     }
 
-    public function getDataByUID($uid){
+    public function getDataByUID($uid, $type){
+        if($type == 'klant'){
+            $dn = $this->config['LDAP_BASEDN'];
+        }else{
+            $dn = $this->config['LDAP_EMPLOYEEDN'];
+        }
+
         ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
-        $query = @ldap_search(self::$conn, $this->config['LDAP_BASEDN'], "(uid=".ldap_escape($uid).")");
+        $query = @ldap_search(self::$conn, $dn, "(uid=".ldap_escape($uid).")");
         $result = @ldap_get_entries(self::$conn, $query);
 
         return $result[0] ?? false;
@@ -110,5 +122,14 @@ class Ldap
     private function createRDN($klantnummer)
     {
         return "uid=$klantnummer,".$this->config['LDAP_BASEDN'];
+    }
+
+    public function getEmployeeGroup($userDN)
+    {
+        ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
+        $query = @ldap_search(self::$conn, "ou=groups,dc=energiemeter,dc=local", "(uniqueMember=".ldap_escape($userDN).")");
+        $result = @ldap_get_entries(self::$conn, $query);
+
+        return $result[0]['cn'][0] ?? false;
     }
 }

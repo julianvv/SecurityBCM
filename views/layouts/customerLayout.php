@@ -31,39 +31,51 @@ $app = Application::$app;
     <link rel="stylesheet" href="../../assets/css/custom.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark customer-bg" style="height: 8vh;">
-    <a class="navbar-brand brand" href="/"><img
-                src="../../assets/img/YouthEnergy.png"
-                alt="YouthEnergy Logo"></a>
-
-    <?= $app->timer ? sprintf("Time to execute in ms: %f", (hrtime(true) - $app->start) / 1e+6) : '' ?>
-
-    <?php if (Application::$app->session->get('logged_in')) { ?>
-        <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent'
-                aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
-            <span class='navbar-toggler-icon'></span>
-        </button>
-        <div class='collapse navbar-collapse' id='navbarSupportedContent'>
-            <ul class='navbar-nav mr-auto'>
+<nav class="navbar navbar-expand-lg navbar-dark customer-bg nav-height">
+    <div class="container-fluid position-relative">
+        <div class="row">
+            <a class="navbar-brand brand" href="/"><img
+                        src="../../assets/img/YouthEnergy.png"
+                        alt="YouthEnergy Logo"></a>
+            <?php if (Application::$app->session->get('logged_in')) { ?>
+            <ul class='navbar-nav mr-auto nav-buttons'>
                 <li class='nav-item mr-2'>
                     <a class='btn btn-greentheme' href='/account'>Account</a>
                 </li>
-                <li class='nav-item mr-2'>
+                <li class='nav-item'>
                     <a class='btn btn-greentheme' href='/verbruiksmeter'>Verbruiksmeter</a>
                 </li>
-            </ul>
-            <ul class='navbar-nav'>
-                <li class='nav-item mr-2'>
+                <li class='right-button'>
                     <form action='/uitloggen' method='post'>
                         <button class='btn btn-greentheme' type='submit'>Uitloggen</button>
                     </form>
                 </li>
             </ul>
+            <ul class='navbar-nav nav-icons'>
+                <li class='nav-item mr-2'>
+                    <i class="fas fa-user fa-2x clickable" onclick="window.location.href = '/account'"></i>
+                </li>
+                <li class='nav-item'>
+                    <i class="fas fa-chart-bar fa-2x clickable" onclick="window.location.href = '/verbruiksmeter'"></i>
+                </li>
+                <li class='right-button'>
+                    <form action='/uitloggen' method='post'>
+                        <i class="fas fa-sign-out-alt fa-2x clickable" onclick="$(this).closest('form').submit()"></i>
+                    </form>
+                </li>
+            </ul>
+            <?php } ?>
         </div>
-    <?php } ?>
+    </div>
+
+
+    <?= $app->timer ? sprintf("Time to execute in ms: %f", (hrtime(true) - $app->start) / 1e+6) : '' ?>
+
+
 </nav>
+
 <div id="error-box"
-     class="alert <?= $app->session->getFlash('notification')['type'] ?>">
+     class="alert <?= $app->session->getFlash('notification')['type'] ?>" <?= $app->session->getFlash('notification') ?  "style='display: block;'" : "" ?>>
     <button type="button" class="close" aria-label="Close">
         <span aria-hidden="true" onclick="hideError()">&times;</span>
     </button>
@@ -72,11 +84,20 @@ $app = Application::$app;
 <div class="background">
     {{content}}
 </div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="row justify-content-center">
+            <span class="text-muted">YouthEnergy&copy; - 2020 | </span>
+            <a class="blue-link ml-1" href="/voorwaarden">Voorwaarden</a>
+        </div>
+    </div>
+</footer>
+
 <script>
     function hideError() {
         $("div#error-box").css('display', 'none');
     }
 </script>
-
 </body>
 </html>

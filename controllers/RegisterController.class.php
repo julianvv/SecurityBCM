@@ -51,8 +51,8 @@ class RegisterController extends Controller
         }
 
         //Wordt het emailadres al gebruikt door een klant in de ldap?
-        if($app->ldap->exists($register_data['klantnummer'])){
-            $register_data['email'] = $app->ldap->getDataByUID($register_data['klantnummer'])['mail'][0];
+        if($app->ldap->exists($register_data['klantnummer'], 'klant')){
+            $register_data['email'] = $app->ldap->getDataByUID($register_data['klantnummer'], 'klant')['mail'][0];
             $app->db->register_db_user($register_data, 0);
         }
 

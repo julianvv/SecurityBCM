@@ -11,7 +11,6 @@ class AuthTermsController extends Controller
 {
     public function __construct()
     {
-        Application::$app->layout = "customerLayout";
         parent::__construct();
         $this->middleware([
             'auth',
@@ -24,20 +23,43 @@ class AuthTermsController extends Controller
         if(!$this->prepareMiddleware()){
             return self::redirect();
         }else{
-            return View::view('account', [
-                'title' => 'Account',
-            ]);
+            $app = Application::$app;
+            $stmt = $app->db->prepare("SELECT  klant.k_klantnummer, klant.k_voornaam, klant.k_achternaam, adres.a_straatnaam, adres.a_huisnummer, adres.a_postcode, adres.a_plaatsnaam, user.email
+                                           FROM ((tbl_adressen as adres
+                                           INNER JOIN tbl_klanten as klant ON adres.a_idAdres = klant.k_fk_idAdres)
+                                           INNER JOIN User as user ON user.k_klantnummer = klant.k_klantnummer)
+                                           WHERE klant.k_klantnummer = :klantnummer");
+            $stmt->bindParam('klantnummer', $app->session->get('userdata')['k_klantnummer']);
+            $stmt->execute();
+            $klant_gegevens = $stmt->fetch();
+
+            $data['voornaam'] = $klant_gegevens['k_voornaam'];
+            $data['achternaam'] = $klant_gegevens['k_achternaam'];
+            $data['straatnaam'] = $klant_gegevens['a_straatnaam'];
+            $data['huisnummer'] = $klant_gegevens['a_huisnummer'];
+            $data['postcode'] = $klant_gegevens['a_postcode'];
+            $data['plaatsnaam'] = $klant_gegevens['a_plaatsnaam'];
+            $data['klantnummer'] = $klant_gegevens['k_klantnummer'];
+            $data['email'] = $klant_gegevens['email'];
+
+            $data['title'] = "Mijn Account";
+
+            return View::view('account', $data);
         }
     }
 
-    public function showVerifyPage()
+    public function showAkkoordPage()
     {
-        if(!$this->prepareMiddleware()){
-            return self::redirect();
-        }else{
-            return View::view('verify', [
-                'title' => 'Verifiëren',
+        $this->prepareMiddleware();
+        if($this->failed[0] == 'auth'){
+            return Application::$app->response->redirect('/');
+        }else if($this->failed[0] == 'terms'){
+            return View::view('akkoord', [
+                'title' => 'Voorwaarden'
             ]);
+        }else{
+            Application::$app->session->setFlash('notification', ['type' => 'alert-danger', 'message' => 'Uw heeft al akkoord gegeven.']);
+            return Application::$app->response->redirect('/verbruiksmeter');
         }
     }
 
@@ -47,7 +69,6 @@ class AuthTermsController extends Controller
             return self::redirect();
         }else{
             $app = Application::$app;
-            //TODO: Data ophalen uit DB;
             $stmt = $app->db->prepare("SELECT  klant.k_klantnummer, klant.k_voornaam, klant.k_achternaam, adres.a_straatnaam, adres.a_huisnummer, adres.a_postcode, adres.a_plaatsnaam, kv.v_code 
                                            FROM (((tbl_adressen as adres
                                            INNER JOIN tbl_klanten as klant ON adres.a_idAdres = klant.k_fk_idAdres)

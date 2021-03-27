@@ -11,7 +11,6 @@ class ApplicationController extends Controller
 {
     public function __construct()
     {
-        Application::$app->layout = 'customerLayout';
         parent::__construct();
         $this->middleware([
             'auth',
@@ -24,10 +23,26 @@ class ApplicationController extends Controller
         return View::view('voorwaarden', ['title' => 'Voorwaarden']);
     }
 
+
+    public function showVerifyPage()
+    {
+        $this->prepareMiddleware();
+        if($this->failed[0] == 'permission'){
+            return View::view('verify', [
+                'title' => 'Verifiëren',
+            ]);
+        }else if($this->failed[0] == 'terms'){
+            return Application::$app->response->redirect('/akkoord');
+        }else{
+            return Application::$app->response->redirect('/account');
+        }
+    }
+
     public function showLoginPage()
     {
-        if($this->prepareMiddleware()){
-            return Application::$app->response->redirect('/verbruiksmeter');
+        $this->prepareMiddleware();
+        if($this->failed[0] != 'auth'){
+            return Application::$app->response->redirect('/account');
         }else{
             return View::view('home', [
                 'title' => 'Home',

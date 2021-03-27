@@ -1,6 +1,6 @@
 <div class="d-flex flex-column justify-content-center main-col">
     <div class="d-flex justify-content-center main-row">
-        <div class="card width-spacing height-spacing nav-padding scrollable">
+        <div class="card width-spacing height-spacing scrollable">
             <header class="m-3">
                 <address class="client-address">
                     {{voornaam}} {{achternaam}}<br/>

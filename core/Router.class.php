@@ -45,9 +45,14 @@ class Router
         $method = $this->request->getMethod();
         $callback = $this->routes[$method][$path] ?? false;
 
+        if(preg_match("/\/intranet\/?/", $path)){
+            Application::$app->layout = "employeeLayout";
+        }else{
+            Application::$app->layout = "customerLayout";
+        }
+
         if(!$callback)
         {
-            Application::$app->layout = "customerLayout";
             Application::$app->response->setStatusCode(404);
             return View::view('_404', [
                 'title' => '404',
@@ -56,7 +61,7 @@ class Router
 
         if(is_string($callback))
         {
-            return View::view($callback, 'mainLayout');
+            return View::view($callback);
         }
 
         $controller = new $callback[0];
