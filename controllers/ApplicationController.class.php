@@ -19,6 +19,12 @@ class ApplicationController extends Controller
         ]);
     }
 
+    public function forgotPassword()
+    {
+        $data = Application::$app->request->getBody();
+        
+    }
+
     public function showVoorwaardenPage(){
         return View::view('voorwaarden', ['title' => 'Voorwaarden']);
     }

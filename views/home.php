@@ -67,7 +67,7 @@
                                    name="password-confirm">
                         </div>
                         <div class="custom-control custom-checkbox pb-3">
-                            <input type="checkbox" class="custom-control-input" id="privacy-statement">
+                            <input type="checkbox" class="custom-control-input" id="privacy-statement" name="privacy-statement">
                             <label for="privacy-statement" class="custom-control-label">Ik ga akkoord met <a
                                         href="/voorwaarden">voorwaarden</a>.</label>
                         </div>
@@ -163,7 +163,7 @@
     $("button#resetpassword-submit").click(function (e) {
         e.preventDefault();
         $.ajax({
-            url: "/resetpassword",
+            url: "/forgot-password",
             data: $("form#resetpassword-form").serialize(),
             dataType: 'json',
             method: 'post',

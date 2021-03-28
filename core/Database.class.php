@@ -36,19 +36,25 @@ class Database
 
     public function register_db_user($register_data, $new = 1)
     {
-        //TODO: Pending status
-
         //TODO: Try catch? Error? Revert creation of user.
 
         $permission_role = "Klant";
         $permission_granted = 0;
         $pending = 1;
-        $stmt = Application::$app->db->prepare("INSERT INTO User (email, permission_role, k_klantnummer, permission_granted, pending) VALUES (:email, :permission_role, :k_klantnummer, :permission_granted, :pending)");
+
+        if(isset($register_data['privacy-statement'])){
+            $akkoord = 1;
+        }else{
+            $akkoord = 0;
+        }
+
+        $stmt = Application::$app->db->prepare("INSERT INTO User (email, permission_role, k_klantnummer, permission_granted, pending, akkoord_met_voorwaarden) VALUES (:email, :permission_role, :k_klantnummer, :permission_granted, :pending, :akkoord)");
         $stmt->bindParam("email", $register_data['email'], \PDO::PARAM_STR);
         $stmt->bindParam("permission_role", $permission_role, \PDO::PARAM_STR);
         $stmt->bindParam("k_klantnummer", $register_data['klantnummer'], \PDO::PARAM_STR);
         $stmt->bindParam("permission_granted", $permission_granted, \PDO::PARAM_INT);
         $stmt->bindParam("pending", $pending, \PDO::PARAM_INT);
+        $stmt->bindParam("akkoord", $akkoord, \PDO::PARAM_INT);
         $stmt->execute();
 
         $stmt = Application::$app->db->prepare("SELECT * FROM User WHERE k_klantnummer = :klantnummer");

@@ -63,6 +63,21 @@ class AuthTermsController extends Controller
         }
     }
 
+    public function processAkkoord()
+    {
+        $value = $_POST['privacy-statement'];
+        if($value == "true"){
+            $status = true;
+        }
+
+        $stmt = Application::$app->db->prepare('UPDATE User SET akkoord_met_voorwaarden = 1 WHERE id = :id');
+        $stmt->bindParam('id', Application::$app->session->get('userdata')['id'], \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $array = array("status" => $status ?? false, "error" => "U dient akkoord te gaan met onze voorwaarden.");
+        die(json_encode($array));
+    }
+
     public function showLetterPage()
     {
         if(!$this->prepareMiddleware()){

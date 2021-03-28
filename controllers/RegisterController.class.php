@@ -50,6 +50,10 @@ class RegisterController extends Controller
             die(json_encode(array("status" => false, "error" => "Wachtwoorden komen niet overeen.")));
         }
 
+        if(!isset($register_data['privacy-statement'])){
+            die(json_encode(array("status" => false, "error" => "U dient akkoord te gaan met onze privacy voorwaarden.")));
+        }
+
         //Wordt het emailadres al gebruikt door een klant in de ldap?
         if($app->ldap->exists($register_data['klantnummer'], 'klant')){
             $register_data['email'] = $app->ldap->getDataByUID($register_data['klantnummer'], 'klant')['mail'][0];

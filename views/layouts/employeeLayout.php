@@ -64,7 +64,7 @@ include "employeenavbarlogics.php";
 <footer class="footer employee-bg">
     <div class="container">
         <div class="row justify-content-center">
-            <span>YouthEnergy&copy; - 2020 | </span>
+            <span>YouthEnergy&copy; - 2021 | </span>
             <a class="ml-1" href="/voorwaarden" style="color: #ace395">Voorwaarden</a>
         </div>
     </div>

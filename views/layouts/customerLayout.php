@@ -88,7 +88,7 @@ $app = Application::$app;
 <footer class="footer">
     <div class="container">
         <div class="row justify-content-center">
-            <span class="text-muted">YouthEnergy&copy; - 2020 | </span>
+            <span class="text-muted">YouthEnergy&copy; - 2021 | </span>
             <a class="blue-link ml-1" href="/voorwaarden">Voorwaarden</a>
         </div>
     </div>
