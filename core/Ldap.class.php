@@ -23,7 +23,7 @@ class Ldap
 
     public function authenticate($mail, $password) : bool
     {
-        $rdn = self::getDataByMail($mail)['dn'];
+        $rdn = self::getDataByMail($mail, 'klant')['dn'];
 
         $bind = @ldap_bind(self::$conn, $rdn, $password);
 

@@ -17,8 +17,8 @@ $app->router->get('/', [\controllers\ApplicationController::class, 'showLoginPag
 $app->router->post('/login', [\controllers\AuthController::class, 'login']);
 $app->router->post('/register', [\controllers\RegisterController::class, 'register']);
 
-$app->router->get('/verify', [\controllers\AuthTermsController::class, 'showVerifyPage']);
-$app->router->get('/akkoord', [\controllers\AuthPageController::class, 'showAkkoordPage']);
+$app->router->get('/verify', [\controllers\ApplicationController::class, 'showVerifyPage']);
+$app->router->get('/akkoord', [\controllers\AuthTermsController::class, 'showAkkoordPage']);
 $app->router->get('/letter', [\controllers\AuthTermsController::class, 'showLetterPage']);
 $app->router->get('/voorwaarden', [\controllers\ApplicationController::class, 'showVoorwaardenPage']);
 
