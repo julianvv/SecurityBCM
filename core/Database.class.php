@@ -25,6 +25,12 @@ class Database
         }
     }
 
+    public function startUserSession($mail)
+    {
+        $_SESSION['logged_in'] = true;
+        Application::$app->db->fetchByEmail($mail);
+    }
+
     public function prepare($sql){
         return self::$pdo->prepare($sql);
     }
@@ -36,8 +42,6 @@ class Database
 
     public function register_db_user($register_data, $new = 1)
     {
-        //TODO: Try catch? Error? Revert creation of user.
-
         $permission_role = "Klant";
         $permission_granted = 0;
         $pending = 1;
@@ -69,9 +73,12 @@ class Database
         $stmt->execute();
 
         if($new === 1){
+            Application::$app->logger->writeToLog(sprintf("Nieuw account geregistreerd met e-mail: %s en ID: `%s` vanaf IP: %s", $register_data['email'], $id, $_SERVER['REMOTE_ADDR']));
             Application::$app->ldap->authenticate($register_data['email'], $register_data['password']);
+            self::startUserSession($register_data['email']);
             die(json_encode(array("status" => true, "redirect" => "/")));
         }else{
+            Application::$app->logger->writeToLog(sprintf("Bestaand account geregistreerd met email: %s en ID: `%s` vanaf IP: %s", $register_data['email'], $id, $_SERVER['REMOTE_ADDR']));
             Application::$app->session->setFlash('notification', ["type" => "alert-success", "message" => "U heeft al een account bij YouthEnergy. Login met uw bestaande account."]);
             die(json_encode(array("status" => true, "redirect" => "/")));
         }
@@ -96,6 +103,15 @@ class Database
         $stmt->execute();
         $data = $stmt->fetch();
         Application::$app->session->set('userdata', $data);
+    }
+
+    public function getUserID($email)
+    {
+        $stmt = Database::$pdo->prepare("SELECT * FROM User WHERE email= :email");
+        $stmt->bindParam("email", $email);
+        $stmt->execute();
+        $data = $stmt->fetch();
+        return $data['id'];
     }
 
     public function refreshSession()

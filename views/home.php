@@ -164,11 +164,18 @@
         e.preventDefault();
         $.ajax({
             url: "/forgot-password",
-            data: $("form#resetpassword-form").serialize(),
+            data: $("form#forgotpassword-form").serialize(),
             dataType: 'json',
             method: 'post',
             success: function (response) {
-                console.log(response);
+                if(response.status){
+                    window.location.href = '/'
+                }else{
+                    resetErrorBox();
+                    $("div#error-box > p").text(response.message);
+                    $("div#error-box").css("display", 'block');
+                    $("div#error-box").addClass("alert-danger");
+                }
             }
         });
     });

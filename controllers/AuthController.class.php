@@ -34,6 +34,9 @@ class AuthController extends Controller
                 $status = true;
             }
         }
+        if($status ?? false){
+            $app->db->startUserSession($email);
+        }
 
         $array['status'] = $status ?? false;
         $array['error'] = $error ?? "Dit is geen geldige combinatie.";

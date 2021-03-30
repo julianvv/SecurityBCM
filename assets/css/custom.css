@@ -527,6 +527,11 @@ SCROLLBARS
     margin: 0;
 }
 
+.account-verwijderen:hover{
+    cursor: pointer;
+    color: lightgray;
+}
+
 .account-title {
     padding-bottom: 1vh;
 }

@@ -29,12 +29,10 @@ class Ldap
 
         if($bind)
         {
-            $_SESSION['logged_in'] = true;
-            Application::$app->db->fetchByEmail($mail);
-
+        Application::$app->logger->writeToLog(sprintf("Gebruiker `%s` succesvol ingelogd vanaf IP: %s", Application::$app->db->getUserID($mail), $_SERVER['REMOTE_ADDR']));
             return true;
         }
-
+        Application::$app->logger->writeToLog(sprintf("Gebruiker met `%s` geweigerd. Vanaf IP: %s", Application::$app->db->getUserID($mail), $_SERVER['REMOTE_ADDR']));
         return false;
     }
 
@@ -73,12 +71,11 @@ class Ldap
             if(ldap_modify(self::$conn, $rdn, $entry) === false){
                 die(json_encode(array("status" => false, "error" => "Wachtwoord encryptie niet gelukt.")));
             }
-
         }else{
             Application::$app->session->setFlash('notification', ["type" => "alert-success", "message" => "U heeft al een account bij YouthEnergy. Login met uw bestaande account."]);
             die(json_encode(array("status" => true, "redirect" => "/")));
         }
-
+        Application::$app->logger->writeToLog(sprintf("Nieuw LDAP-account geregistreerd met email: %s vanaf IP: %s", $register_data['email'], $_SERVER['REMOTE_ADDR']));
         Application::$app->db->register_db_user($register_data);
     }
 
@@ -119,6 +116,27 @@ class Ldap
         return $result[0] ?? false;
     }
 
+    public function changePassword($email, $newPassword, $type)
+    {
+        $rdn = $this->getDataByMail($email, $type)['dn'];
+
+        if (CRYPT_SHA512){
+            $salt = uniqid(mt_rand(), true);
+
+            $encoded_newPassword = "{CRYPT}". crypt($newPassword, '$6$' . $salt . '$');
+        }else{
+            die(json_encode(array("status" => false, "error" => "Fout bij het versleuten van het wachtwoord.")));
+        }
+        //Modify user with new password
+        $entry = ['userPassword' => $encoded_newPassword];
+
+        if(ldap_modify(self::$conn, $rdn, $entry) === false){
+            die(json_encode(array("status" => false, "error" => "Wachtwoord encryptie niet gelukt.")));
+        }else{
+            Application::$app->logger->writeToLog(sprintf("Wachtwoord veranderd voor %s vanaf IP: %s", $email, $_SERVER['REMOTE_ADDR']));
+        }
+    }
+    
     private function createRDN($klantnummer)
     {
         return "uid=$klantnummer,".$this->config['LDAP_BASEDN'];

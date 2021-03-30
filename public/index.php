@@ -19,6 +19,7 @@ $app->router->post('/register', [\controllers\RegisterController::class, 'regist
 $app->router->post('/forgot-password', [\controllers\ApplicationController::class, 'forgotPassword']);
 
 $app->router->get('/verify', [\controllers\ApplicationController::class, 'showVerifyPage']);
+$app->router->post('/verify', [\controllers\ApplicationController::class, 'verifyCode']);
 $app->router->get('/akkoord', [\controllers\AuthTermsController::class, 'showAkkoordPage']);
 $app->router->post('/akkoord', [\controllers\AuthTermsController::class, 'processAkkoord']);
 $app->router->get('/letter', [\controllers\AuthTermsController::class, 'showLetterPage']);
@@ -33,6 +34,7 @@ $app->router->post('/getSessionData', [\controllers\SessionController::class, 'g
 //Navbar buttons
 $app->router->post('/uitloggen', [\controllers\AuthController::class, 'logout']);
 $app->router->get('/account', [\controllers\AuthTermsController::class, 'showAccountPage']);
+$app->router->post('/account', [\controllers\AuthTermsController::class, 'accountChange']);
 $app->router->get('/verbruiksmeter', [\controllers\ApplicationController::class, 'showVerbruiksmeter']);
 
 $app->router->get('/login-test', [\controllers\TestController::class, 'LoginTest']);
