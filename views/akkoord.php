@@ -18,10 +18,11 @@
 
 <script>
     function akkoord(){
+        let permission = $("input#privacy-statement").is(":checked") ? 1 : 0;
         $.ajax({
            method: 'post',
            url: '/akkoord',
-           data: 'privacy-statement='+document.getElementById('privacy-statement').checked,
+           data: { privacy_statement: permission },
            dataType: 'json',
            success: function (response){
                 if (response.status){

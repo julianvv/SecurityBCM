@@ -14,15 +14,35 @@
                     <form>
                         <div class="form-group">
                             <label for=""></label>
-                            <input type="number" class="form-control" placeholder="Verificatie code">
+                            <input type="number" class="form-control" placeholder="Verificatie code" id="verify-code">
                         </div>
-                        <button style="display: block" class="btn btn-greentheme ml-auto mr-auto" type="button">Verifieer Account</button>
+                        <button style="display: block" class="btn btn-greentheme ml-auto mr-auto" type="button" id="verify-account">Verifieer Account</button>
                     </form>
                 </div>
                 <div class="float-right">
-                    Ter demonstratie: <a href="/letter">Brief</a>
+                    Ter demonstratie: <a href="/letter" target="_blank" rel="noreferrer noopener">Brief</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $("button#verify-account").click(function (){
+       $.ajax({
+           url: '/verify',
+           method: 'post',
+           dataType: 'json',
+           data: { verificatieCode: $("input#verify-code").val() },
+           success: function (response){
+                if(response.status){
+                    window.location.href = "/verbruiksmeter";
+                }else{
+                    $("div#error-box > p").text(response.message);
+                    $("div#error-box").css("display", 'block');
+                    $("div#error-box").addClass("alert-danger");
+                }
+           }
+       });
+    });
+</script>

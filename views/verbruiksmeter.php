@@ -105,6 +105,13 @@
 <!--<canvas id="myChart" width="400" height="400" style="background: white;"></canvas>-->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 <script>
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    $(document).ready(async function (){
+        await delay(5000);
+        $("div#error-box").alert('close');
+    });
+
     var acc = document.getElementsByClassName("accordion-provinciaal");
     var i;
 
