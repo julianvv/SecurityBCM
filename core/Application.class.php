@@ -41,7 +41,9 @@ class Application
         $this->ldap = new Ldap();
         $this->db = new Database();
 
-        $this->db->refreshSession();
+        if($this->db->connected()){
+            $this->db->refreshSession();
+        }
     }
 
     public function run()

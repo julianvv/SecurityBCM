@@ -150,4 +150,19 @@ class Ldap
 
         return $result[0]['cn'][0] ?? false;
     }
+
+    public function getEmployees()
+    {
+        ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
+        $query = @ldap_search(self::$conn, $this->config["LDAP_EMPLOYEEDN"], "(objectClass=inetOrgPerson)", ["cn", "sn", "uid", "dn"]);
+        $queryResult = @ldap_get_entries(self::$conn, $query);
+        $result = array();
+        foreach ($queryResult as $employee){
+            $group = $this->getEmployeeGroup($employee["dn"]);
+            @$employee["group"] = $group;
+            //$queryResult[] = $employee;
+            array_push($result, $employee);
+        }
+        return $result;
+    }
 }

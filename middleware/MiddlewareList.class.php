@@ -15,7 +15,11 @@ class MiddlewareList
         $this->middleware = array(
             'auth' => AuthMiddleware::class,
             'permission' => PermMiddleware::class,
-            'terms' => TermsMiddleware::class
+            'terms' => TermsMiddleware::class,
+            'beheerder' => BeheerderMiddleware::class,
+            'marketing' => MarketingMiddleware::class,
+            'manager' => ManagerMiddleware::class,
+            'klantenservice' => KlantenserviceMiddleware::class
         );
     }
 

@@ -55,6 +55,9 @@ class ApplicationController extends Controller
     public function verifyCode()
     {
         $data = Application::$app->request->getBody();
+        if (!Application::$app->session->get('logged_in')){
+            die(json_encode(['status' => false, 'message' => 'U bent niet ge-authenticeerd.']));
+        }
         $id = Application::$app->session->get('userdata')['id'];
         $code = $data['verificatieCode'];
 

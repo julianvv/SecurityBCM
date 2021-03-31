@@ -11,14 +11,13 @@ class Logger
 
     public function __construct()
     {
-        $date = $this->getDate();
         $directory = '/var/log/EnergieBewust/';
-        $filename = sprintf("%s.php.log", $date);
+        $filename = sprintf("customer.php.log");
 
         $path = $directory.$filename;
         $this->file = fopen($path, 'a');
 
-        $employeeFilename = sprintf("%s.php.employee.log", $date);
+        $employeeFilename = sprintf("employee.php.log");
         $employeePath = $directory.$employeeFilename;
         $this->employeeFile = fopen($employeePath, 'a');
     }
@@ -26,6 +25,7 @@ class Logger
     public function __destruct()
     {
        fclose($this->file);
+       fclose($this->employeeFile);
     }
 
     public function writeToLog($message)

@@ -27,7 +27,9 @@ $app->router->get('/voorwaarden', [\controllers\ApplicationController::class, 's
 
 //Intranet pagina's
 $app->router->get('/intranet', [\controllers\IntranetController::class, 'showIndex']);
-$app->router->get('/intranet/verbruiksmeter', [\controllers\IntranetController::class, 'showVerbruiksmeter']);
+$app->router->post('/intranet/get_data', [\controllers\IntranetController::class, 'get_data']);
+$app->router->post('/intranet/get_employees', [\controllers\IntranetController::class, 'get_employee_data']);
+//$app->router->get('/intranet/verbruiksmeter', [\controllers\IntranetController::class, 'showVerbruiksmeter']);
 
 $app->router->post('/getSessionData', [\controllers\SessionController::class, 'getSessionData']);
 

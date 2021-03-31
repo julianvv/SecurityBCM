@@ -33,7 +33,7 @@ a.navbar-brand {
 }
 
 .width-spacing{
-    max-width: 99vw;
+    max-width: 96vw;
 }
 
 .height-spacing {
@@ -527,11 +527,6 @@ SCROLLBARS
     margin: 0;
 }
 
-.account-verwijderen:hover{
-    cursor: pointer;
-    color: lightgray;
-}
-
 .account-title {
     padding-bottom: 1vh;
 }
@@ -539,4 +534,100 @@ SCROLLBARS
 /*INTRANET*/
 .opacity-background{
     background-color: rgba(255,255,255, 0.5);
+    margin-top: 5%;
 }
+
+.employee-customer-info {
+    background-color: white;
+    max-height: 95%;
+    max-width: 95%;
+    height: 100%;
+}
+
+.customer-info-helpdesk{
+    border-color: black;
+}
+
+.employee-function-card{
+    background-color: #4792d2;
+    border-color: black;
+    margin: 1%;
+}
+
+.customer-info-header {
+    color: white;
+    background-color: #4792d2;
+    font-weight: bolder;
+    border-color: black;
+}
+
+.customer-info-helpdesk {
+    margin: 1%;
+}
+
+.customerinfo-request-button {
+    border-radius: 5px;
+    color: white;
+    background-color: #4792d2;
+    border-color: black;
+}
+
+.helpdesk-main-row {
+    min-width: 95vw;
+}
+
+.verbruiksmeter-header-intranet{
+    background-color: #4792d2;
+    color: white;
+}
+
+.vebruiksmeter-cardbody-intranet{
+    background-color: #c9daf8;
+}
+
+.postcode-marketing-request{
+    border-radius: 5px;
+    color: white;
+    background-color: #4792d2;
+    border-color: black;
+    margin: 5px;
+}
+
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}

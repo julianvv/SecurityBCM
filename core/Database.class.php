@@ -25,6 +25,14 @@ class Database
         }
     }
 
+    public function connected()
+    {
+        if(self::$pdo){
+            return true;
+        }
+        return false;
+    }
+
     public function startUserSession($mail)
     {
         $_SESSION['logged_in'] = true;
