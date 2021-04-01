@@ -79,6 +79,61 @@ class Ldap
         Application::$app->db->register_db_user($register_data);
     }
 
+    public function createEmployee($data)
+    {
+        ldap_bind(self::$conn, Application::$config['LDAP_USERNAME'], Application::$config['LDAP_PASSWORD']);
+        $rdn = "uid=".$data["uid"].",".$this->config["LDAP_EMPLOYEEDN"];
+
+        if($this->exists($rdn, "employee")){
+            die(json_encode(["status"=>false, "message"=>"Medewerker bestaat al."]));
+        }
+
+        $fields = Array();
+
+        $fields['objectClass'][] = "top";
+        $fields['objectClass'][] = "inetOrgPerson";
+        $fields['objectClass'][] = "person";
+        $fields['objectClass'][] = "organizationalPerson";
+
+        $fields['cn'] = $data['cn'];
+        $fields['sn'] = $data['sn'];
+        $fields['uid'] = $data['uid'];
+
+        //Create LDAP account for user auth
+        $add_user = @ldap_add(self::$conn, $rdn, $fields);
+
+        if($add_user === true){
+            if (CRYPT_SHA512){
+                $newPassword = $data['password'];
+
+                $salt = uniqid(mt_rand(), true);
+
+                $encoded_newPassword = "{CRYPT}". crypt($newPassword, '$6$' . $salt . '$');
+            }else{
+                die(json_encode(array("status" => false, "message" => "Fout bij het versleuten van het wachtwoord.")));
+            }
+            //Modify user with new password
+            $entry = ['userPassword' => $encoded_newPassword];
+
+            if(ldap_modify(self::$conn, $rdn, $entry) === false){
+                die(json_encode(array("status" => false, "message" => "Wachtwoord encryptie niet gelukt.")));
+            }
+        }else{
+            die(json_encode(array("status" => false, "message" => "Account aanmaken niet gelukt.")));
+        }
+
+        $cn = "cn=".ldap_escape($data["group"]).",ou=groups,dc=energiemeter,dc=local";
+        $entry = [];
+        $entry["uniqueMember"] = $rdn;
+        ldap_bind(self::$conn, $this->config["LDAP_GROUP_MANAGER"], $this->config["LDAP_GROUP_PASSWORD"]);
+        if(ldap_mod_add(self::$conn, $cn, $entry)===false) {
+            return false;
+        }
+
+        Application::$app->logger->writeToEmployeeLog(sprintf("Nieuw medewerker aangemaakt met uid %s en groep %s", $data["uid"], $data["group"]));
+        die(json_encode(array("status" => true, "message" => "Account succesvol aangemaakt.")));
+    }
+
     public function exists($string, $type) : bool
     {
         if($this->getDataByMail($string, $type) || $this->getDataByUID($string, $type)){
@@ -149,6 +204,55 @@ class Ldap
         $result = @ldap_get_entries(self::$conn, $query);
 
         return $result[0]['cn'][0] ?? false;
+    }
+
+    public function getGroups()
+    {
+        ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
+        $query = @ldap_search(self::$conn, "ou=groups,dc=energiemeter,dc=local", "(objectClass=groupOfUniqueNames)",["cn"]);
+        $result = @ldap_get_entries(self::$conn, $query);
+        $tmp =[];
+        foreach($result as $group){
+            $tmp[]=$group["cn"][0];
+        }
+
+        return $tmp;
+    }
+
+    public function updateEmployee($data)
+    {
+        $oldUID = $data["oldUID"];
+        $group = $data["group"];
+        $oldGroup = $data["oldGroup"];
+
+        $dn = "uid=".$oldUID.",".$this->config["LDAP_EMPLOYEEDN"];
+        $entry = [];
+        $entry["cn"] = $data["cn"];
+        $entry["sn"] = $data["sn"];
+        $entry["uid"] = $data["uid"];
+
+        ldap_bind(self::$conn, $this->config['LDAP_USERNAME'], $this->config['LDAP_PASSWORD']);
+        if(ldap_modify(self::$conn, $dn, $entry)===false) {
+            return false;
+        }
+
+        //remove from old group
+        $cn = "cn=".ldap_escape($oldGroup).",ou=groups,dc=energiemeter,dc=local";
+        $entry = [];
+        $entry["uniqueMember"] = $dn;
+        ldap_bind(self::$conn, $this->config["LDAP_GROUP_MANAGER"], $this->config["LDAP_GROUP_PASSWORD"]);
+        if(ldap_mod_del(self::$conn, $cn, $entry)===false) {
+            return false;
+        }
+
+        $cn = "cn=".ldap_escape($group).",ou=groups,dc=energiemeter,dc=local";
+        $entry = [];
+        $entry["uniqueMember"] = $dn;
+        ldap_bind(self::$conn, $this->config["LDAP_GROUP_MANAGER"], $this->config["LDAP_GROUP_PASSWORD"]);
+        if(ldap_mod_add(self::$conn, $cn, $entry)===false) {
+            return false;
+        }
+        return true;
     }
 
     public function getEmployees()

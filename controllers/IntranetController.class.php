@@ -60,6 +60,64 @@ class IntranetController extends Controller
         }
     }
 
+    public function get_groups()
+    {
+        $perms = Application::$app->session->get("permissions");
+        if(!in_array("get_employee_data", $perms)){
+            die(json_encode(["status"=>false, "message"=>"Invalide rechten"]));
+        }
+        $groups = Application::$app->ldap->getGroups();
+        die(json_encode(["status"=>true,"result"=>$groups]));
+    }
+
+    public function change_employee()
+    {
+        $data = Application::$app->request->getBody();
+        $perms = Application::$app->session->get("permissions");
+        if(!in_array("update_employee", $perms)){
+            die(json_encode(["status"=>false, "message"=>"Invalide rechten"]));
+        }
+        if(Application::$app->ldap->updateEmployee($data)){
+            die(json_encode(["status"=>true, "message"=>"Medewerker succesvol aangepast"]));
+        }
+        die(json_encode(["status"=>false, "message"=>"Er is een fout opgetreden"]));
+
+    }
+
+    public function create_employee()
+    {
+        $data = Application::$app->request->getBody();
+        $perms = Application::$app->session->get("permissions");
+        if(!in_array("create_employee", $perms)){
+            die(json_encode(["status"=>false, "message"=>"Invalide rechten"]));
+        }
+        if(empty($data["uid"])||empty($data["cn"])||empty($data["sn"])||empty($data["group"])||empty($data["password"])||empty($data["passwordConfirm"])){
+            die(json_encode(["status"=>false, "message"=>"Vul alle velden in."]));
+        }
+        if(Application::$app->db->getRoleRank($data["group"])>Application::$app->db->getRoleRank(Application::$app->session->get("employee_group"))){
+            if(!filter_var($data['password'], FILTER_VALIDATE_REGEXP, array("options"=>array("regexp" => "/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W])\S*$/")))){
+                die(json_encode(["status"=>false, "message"=>"Wachtwoord voldoet niet aan de eisen"]));
+            }
+            if($data["password"]!=$data["passwordConfirm"]){
+                die(json_encode(["status"=>false, "message"=>"Wachtwoord is niet gelijk"]));
+            }else{
+                Application::$app->ldap->createEmployee($data);
+            }
+        }
+        die(json_encode(["status"=>false, "message"=>"Je hebt niet de juiste rechten deze rol te geven."]));
+
+    }
+
+    public function delete_employee()
+    {
+        $perms = Application::$app->session->get("permissions");
+        if(!in_array("remove_employee", $perms)){
+            die(json_encode(["status"=>false, "message"=>"Invalide rechten"]));
+        }
+        //delete employee in ldap
+        die(json_encode(["status"=>true, "message"=>"Medewerker succesvol verwijderd"]));
+    }
+
     public function get_employee_data()
     {
         $perms = Application::$app->session->get("permissions");
