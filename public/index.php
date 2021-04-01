@@ -29,9 +29,13 @@ $app->router->get('/voorwaarden', [\controllers\ApplicationController::class, 's
 $app->router->get('/intranet', [\controllers\IntranetController::class, 'showIndex']);
 $app->router->post('/intranet/get_data', [\controllers\IntranetController::class, 'get_data']);
 $app->router->post('/intranet/get_employees', [\controllers\IntranetController::class, 'get_employee_data']);
-//$app->router->get('/intranet/verbruiksmeter', [\controllers\IntranetController::class, 'showVerbruiksmeter']);
+$app->router->post('/intranet/get_groups', [\controllers\IntranetController::class, 'get_groups']);
+$app->router->post('/intranet/delete_employee', [\controllers\IntranetController::class, 'delete_employee']);
+$app->router->post('/intranet/change_employee', [\controllers\IntranetController::class, 'change_employee']);
+$app->router->post('/intranet/create_employee', [\controllers\IntranetController::class, 'create_employee']);
+$app->router->post('/intranet/intranetData', [\controllers\SessionController::class, 'intranetData']);
 
-$app->router->post('/getSessionData', [\controllers\SessionController::class, 'getSessionData']);
+$app->router->post('/verbruiksmeter', [\controllers\SessionController::class, 'verbruiksmeterData']);
 
 //Navbar buttons
 $app->router->post('/uitloggen', [\controllers\AuthController::class, 'logout']);
