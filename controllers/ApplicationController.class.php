@@ -43,10 +43,10 @@ class ApplicationController extends Controller
             die(json_encode(['status'=>false, 'message'=>'Wachtwoorden komen niet overeen.']));
         }
 
-        $stmt = Application::$app->db->prepare("SELECT User.email, tbl_klanten_verificatie.v_code
-                                                    FROM tbl_klanten_verificatie
-                                                    JOIN User ON User.id = tbl_klanten_verificatie.v_fk_idUser
-                                                    WHERE User.email = :email AND tbl_klanten_verificatie.v_code = :code");
+        $stmt = Application::$app->db->prepare("SELECT User.email, User.id, Password_reset.reset_code
+                                                    FROM Password_reset
+                                                    JOIN User ON User.email = Password_reset.reset_fk_email 
+                                                    WHERE User.email = :email AND Password_reset.reset_code = :code");
         $stmt->bindParam("email", $email, \PDO::PARAM_STR);
         $stmt->bindParam("code", $code, \PDO::PARAM_INT);
         $stmt->execute();
@@ -55,8 +55,8 @@ class ApplicationController extends Controller
             Application::$app->logger->writeToLog(sprintf("Gebruiker `%s` heeft onsuccesvol zijn/haar wachtwoord proberen te wijzigen.", $fetch['id']));
             die(json_encode(['status'=>false, 'message'=>'Combinatie incorrect.']));
         }else{
-            $stmt = Application::$app->db->prepare("DELETE FROM tbl_klanten_verificatie WHERE v_fk_idUser = :id AND v_code = :code");
-            $stmt->bindParam("id", $fetch['id'], \PDO::PARAM_INT);
+            $stmt = Application::$app->db->prepare("DELETE FROM Password_reset WHERE reset_fk_email = :email AND reset_code = :code");
+            $stmt->bindParam("email", $email, \PDO::PARAM_STR);
             $stmt->bindParam("code", $code, \PDO::PARAM_INT);
             $stmt->execute();
 
