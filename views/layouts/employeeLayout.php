@@ -76,11 +76,21 @@ include "employeenavbarlogics.php";
     }
 
     function logout() {
+        $.ajax({
+            type: 'POST',
+            url: '/intranet/logout',
+            success: function () {
+                logoutAuth()
+            }
+        });
+
+    }
+
+    function logoutAuth(){
         window.location.href = '/';
         $.ajax({
             type: 'GET',
-            url: 'intranet',
-            dataType: 'json',
+            url: '/intranet',
             headers: {
                 "Authorization": "Basic " + btoa('' + ':' + '')
             },

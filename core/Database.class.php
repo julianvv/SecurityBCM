@@ -38,7 +38,7 @@ class Database
         $stmt = self::prepare("SELECT id FROM Roles WHERE name=:group");
         $stmt->bindParam("group", $group, \PDO::PARAM_STR);
         $stmt->execute();
-        return $stmt->fetch()["id"];
+        return $stmt->fetch()["id"] ?? PHP_INT_MAX  ;
     }
 
     public function startUserSession($mail)

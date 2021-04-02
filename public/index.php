@@ -27,11 +27,17 @@ $app->router->get('/voorwaarden', [\controllers\ApplicationController::class, 's
 
 //Intranet pagina's
 $app->router->get('/intranet', [\controllers\IntranetController::class, 'showIndex']);
+$app->router->get('/intranet/rollen', [\controllers\IntranetController::class, 'showRolePage']);
+$app->router->get('/intranet/account', [\controllers\IntranetController::class, 'showAccountPage']);
+$app->router->post('/intranet/logout', [\controllers\IntranetController::class, 'logout']);
 $app->router->post('/intranet/get_data', [\controllers\IntranetController::class, 'get_data']);
+$app->router->post('/intranet/get_logs', [\controllers\IntranetController::class, 'getEmployeeLog']);
 $app->router->post('/intranet/get_employees', [\controllers\IntranetController::class, 'get_employee_data']);
 $app->router->post('/intranet/get_groups', [\controllers\IntranetController::class, 'get_groups']);
 $app->router->post('/intranet/delete_employee', [\controllers\IntranetController::class, 'delete_employee']);
 $app->router->post('/intranet/change_employee', [\controllers\IntranetController::class, 'change_employee']);
+
+$app->router->post('/intranet/change_password', [\controllers\IntranetController::class, 'change_password']);
 $app->router->post('/intranet/create_employee', [\controllers\IntranetController::class, 'create_employee']);
 $app->router->post('/intranet/intranetData', [\controllers\SessionController::class, 'intranetData']);
 
