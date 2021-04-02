@@ -289,7 +289,7 @@
                 $("h5#logModalLabel").text("Logs: "+name);
                 if (!(response.result.length < 1)) {
                     for (const index in response.result) {
-                        log.append("<p>"+response.result[index]+"</p>");
+                        log.append("<p style='max-width: 90%'>"+response.result[index]+"</p>");
                     }
                 }else{
                     log.text("Geen logs bekend over medewerker.");

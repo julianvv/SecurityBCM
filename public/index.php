@@ -13,10 +13,13 @@ $app = new Application(dirname(__DIR__), false);
 
 $app->router->get('', [\controllers\ApplicationController::class, 'showLoginPage']);
 $app->router->get('/', [\controllers\ApplicationController::class, 'showLoginPage']);
+$app->router->get('/reset-password', [\controllers\ApplicationController::class, 'showResetPage']);
+
 
 $app->router->post('/login', [\controllers\AuthController::class, 'login']);
 $app->router->post('/register', [\controllers\RegisterController::class, 'register']);
 $app->router->post('/forgot-password', [\controllers\ApplicationController::class, 'forgotPassword']);
+$app->router->post('/reset-password', [\controllers\ApplicationController::class, 'processResetPage']);
 
 $app->router->get('/verify', [\controllers\ApplicationController::class, 'showVerifyPage']);
 $app->router->post('/verify', [\controllers\ApplicationController::class, 'verifyCode']);

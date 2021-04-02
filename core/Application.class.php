@@ -29,7 +29,6 @@ class Application
         self::$config = LoadEnv::Load($rootDir);
 
         $this->logger = new Logger();
-
         $this->start = hrtime(true);
         $this->timer = $timer;
 
