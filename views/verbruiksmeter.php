@@ -3,27 +3,25 @@
         <div class="col-lg-6 col-md-12 col-sm-12 verbruiksmeter-card">
             <div class="card card-verbruik">
                 <div class="card-header verbruiksmeter-header">
-                    <h2>Eigen Verbruik*</h2>
+                    <h2>Eigen Verbruik</h2>
                 </div>
                 <div class="card-body vebruiksmeter-cardbody">
                     <div class="card energie-kaart">
                         <div class="card-header header-stroom">
-                            <h2 style="text-align: center">Stroom</h2>
+                            <h2 style="text-align: center">Stroomverbruik deze maand</h2>
                         </div>
                         <div class="card-body energie-cardbody">
                             <div class="d-flex justify-content-center">
                                 <div id="energie-div-laag">
-
                                 </div>
                                 <div id="energie-div-hoog">
-
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card energie-kaart">
                         <div class="card-header header-gas ">
-                            <h2>Gas</h2>
+                            <h2>Gasverbruik deze maand</h2>
                         </div>
                         <div class="card-body energie-cardbody d-flex justify-content-center">
                             <div id="gas-div">
@@ -33,7 +31,7 @@
                     </div>
                     <div class="card energie-kaart">
                         <div class="card-header header-eigen">
-                            <h2>Opgewekt</h2>
+                            <h2>Opgewekt deze maand</h2>
                         </div>
                         <div class="card-body energie-cardbody">
                             <div class="d-flex justify-content-center">
@@ -46,7 +44,8 @@
                             </div>
                         </div>
                     </div>
-                    <p class='text-muted'>*Dit is het maandverbruik</p>
+                    <p style="font-weight: bolder">Laag tarief is stroom verbruikt tussen 23:00 en 07:00</p>
+                    <p style="font-weight: bolder">Hoog tarief is stroom verbruikt tussen 07:00 en 23:00</p>
                 </div>
             </div>
         </div>
@@ -367,7 +366,7 @@
         //gasverbruik
         var data = google.visualization.arrayToDataTable([
             ['Label', 'Value'],
-            ['test', gas]
+            ['Gas', gas]
         ]);
 
         var options = {
@@ -376,7 +375,7 @@
             minorTicks: 20,
             max: 1000,
             min: 0,
-            majorTicks: ['0', '1000']
+            majorTicks: ['0 m³', '1000 m³']
         };
 
         chartGas = new google.visualization.Gauge(document.getElementById('gas-div'));

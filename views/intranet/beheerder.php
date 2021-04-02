@@ -14,16 +14,17 @@
                             <h2>Medewerker toevoegen</h2>
                         </div>
                         <div class="card-body vebruiksmeter-cardbody-intranet">
-                            <button class="manager-intranet-button" onclick="openCreateModal()">Medewerker aanmaken</button>
+                            <button class="button-account-intranet" onclick="openCreateModal()">Medewerker aanmaken</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-12 col-sm-12">
                     <div class="card card-manager">
                         <table class="table table-striped" id="employee_table">
-                            <thead class="table-dark">
+                            <thead class="table-primary">
                             <tr>
                                 <th scope="col">UID</th>
+                                <th scope="col">CN</th>
                                 <th scope="col">Voornaam</th>
                                 <th scope="col">Achternaam</th>
                                 <th scope="col">Rol</th>
@@ -42,15 +43,16 @@
 </div>
 
 <!--change modal-->
-<div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="changeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Account aanpassen</h5>
+                <h5 class="modal-title" id="changeModalLabel">Account aanpassen</h5>
                 <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="changeForm">
+                    <input id="changeDN" name="dn" type="text" hidden>
                     <input id="oldUID" name="oldUID" type="text" hidden>
                     <input id="oldGroup" name="oldGroup" type="text" hidden>
                     <div class="form-group">
@@ -58,8 +60,8 @@
                         <input id="changeUID" class="form-control" type="text" name="uid">
                     </div>
                     <div class="form-group">
-                        <label for="changeCN">Voornaam</label>
-                        <input id="changeCN" class="form-control" type="text" name="cn">
+                        <label for="changeGN">Voornaam</label>
+                        <input id="changeGN" class="form-control" type="text" name="givenName">
                     </div>
                     <div class="form-group">
                         <label for="changeSN">Achternaam</label>
@@ -67,7 +69,7 @@
                     </div>
                     <div class="form-group">
                         <label for="changeGroup">Groep</label>
-                        <select class="form-control changeGroup" name="group">
+                        <select class="form-control changeGroup" id="changeGroup" name="group">
 
                         </select>
                     </div>
@@ -82,22 +84,26 @@
 </div>
 
 <!--create modal-->
-<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Account aanmaken</h5>
+                <h5 class="modal-title" id="createModalLabel">Account aanmaken</h5>
                 <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="createForm">
                     <div class="form-group">
+                        <label for="cn">CN</label>
+                        <input id="cn" class="form-control" type="text" name="cn">
+                    </div>
+                    <div class="form-group">
                         <label for="uid">UID</label>
                         <input id="uid" class="form-control" type="text" name="uid">
                     </div>
                     <div class="form-group">
-                        <label for="cn">Voornaam</label>
-                        <input id="cn" class="form-control" type="text" name="cn">
+                        <label for="givenName">Voornaam</label>
+                        <input id="givenName" class="form-control" type="text" name="givenName">
                     </div>
                     <div class="form-group">
                         <label for="sn">Achternaam</label>
@@ -112,8 +118,8 @@
                         <input id="passwordConfirm" class="form-control" type="password" name="passwordConfirm">
                     </div>
                     <div class="form-group">
-                        <label for="changeGroup">Groep</label>
-                        <select class="form-control changeGroup" name="group">
+                        <label for="createGroup">Groep</label>
+                        <select class="form-control changeGroup" name="group" id="createGroup">
 
                         </select>
                     </div>
@@ -122,6 +128,63 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="create()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--log modal-->
+<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logModalLabel"></h5>
+                <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="log-div">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--delete modal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Account verwijderen?</h5>
+                <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteForm" class="d-flex justify-content-around">
+                    <input id="deleteCN" name="deleteCN" type="text" hidden>
+                    <div class="form-group">
+                        <label for="displayDeleteUID" style="font-weight: bolder">UID</label>
+                        <p id="displayDeleteUID"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="displayDeleteCN" style="font-weight: bolder">Voornaam</label>
+                        <p id="displayDeleteGN"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="displayDeleteSN" style="font-weight: bolder">Achternaam</label>
+                        <p id="displayDeleteSN"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="displayDeleteGroup" style="font-weight: bolder">Rol</label>
+                        <p id="displayDeleteGroup"></p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" onclick="delete_employee()">Verwijderen</button>
             </div>
         </div>
     </div>
@@ -154,7 +217,6 @@
     }
 
     function load_employees(){
-        hideError();
         $.ajax({
             url:"/intranet/get_employees",
             method:"post",
@@ -163,11 +225,13 @@
             success:(response)=>{
                 if(response.status){
                     response.result.shift();
-
+                    console.log(response.result)
                     response.result.forEach((element)=>{
+                        let name = element.dn.split(",")[0].split("=")[1];
                         $("table#employee_table > tbody").append('<tr>'+
-                            `<th scope="row">${element.uid[0]}</th>`+
-                                `<td>${element.cn[0]}</td>`+
+                            `<th scope="row" dn="${element.dn}">${element.uid[0]}</th>`+
+                                `<td>${name}</td>`+
+                                `<td>${element.givenname[0]}</td>`+
                                 `<td>${element.sn[0]}</td>`+
                                 `<td>${element.group}</td>`+
                                 '<td><i class="fa fa-pencil pr-1 clickable-employee"></i><i class="fas fa-scroll pr-1 clickable-employee"></i><i'+
@@ -179,18 +243,9 @@
                     for(let clickable of clickables){
                         $(clickable).off("click")
                     }
-                    //console.log($(".clickable-employee"))
-                    // let elements = document.getElementsByClassName(".clickable-employee")
-                    // for(let element of elements){
-                    //     element.removeEventListener("click")
-                    // }
-
-                    $("table#employee_table").on("click", "i.fa-pencil", (event)=>{
-                        loadChangeModal($(event.target).parent().parent());
-                    })
-                    $("table#employee_table").on("click", "i.fa-times",(event)=>{
-                        delete_employee(event.target)
-                    })
+                    $("i.fa-pencil").on("click",loadChangeModal)
+                    $("i.fa-times").on("click",openDeleteModal)
+                    $("i.fa-scroll").on("click",loadLogModal)
 
                 }else{
                     $("div#error-box > p").text(response.message);
@@ -204,60 +259,103 @@
 
 
     function openCreateModal(){
+        hideError();
         $("div#createModal").modal('toggle');
     }
 
-    function loadChangeModal(row){
+    function openDeleteModal(event){
+        let row = $(event.target).parent().parent();
+        let name = row.find("td:eq(0)").text();
+        $("#deleteCN").text(name);
+        $("#displayDeleteUID").text(row.find("th:eq(0)").text());
+        $("#displayDeleteGN").text(row.find("td:eq(1)").text());
+        $("#displayDeleteSN").text(row.find("td:eq(2)").text());
+        $("#displayDeleteGroup").text(row.find("td:eq(3)").text());
+
+        $("div#deleteModal").modal("toggle");
+    }
+
+    function loadLogModal(event){
+        let row = $(event.target).parent().parent();
+        let name = row.find("td:eq(0)").text();
+        let log = $("div#log-div");
+        log.text("");
+        $.ajax({
+            url: '/intranet/get_logs',
+            method: 'post',
+            dataType: 'json',
+            data: "cn="+name,
+            success: (response) => {
+                $("h5#logModalLabel").text("Logs: "+name);
+                if (!(response.result.length < 1)) {
+                    for (const index in response.result) {
+                        log.append("<p>"+response.result[index]+"</p>");
+                    }
+                }else{
+                    log.text("Geen logs bekend over medewerker.");
+                }
+
+               $("#logModal").modal("toggle");
+            },
+            fail: (response) => {
+
+            }
+        });
+    }
+
+    function loadChangeModal(event){
+        let row = $(event.target).parent().parent();
         //Load Data
-        let uid, sn, cn, group;
+        let uid, dn, sn, givenname, group;
+        dn = row.find("th:eq(0)").attr("dn");
         uid = row.find("th:eq(0)").text();
-        cn = row.find("td:eq(0)").text();
-        sn = row.find("td:eq(1)").text();
-        group = row.find("td:eq(2)").text();
+        givenname = row.find("td:eq(1)").text();
+        sn = row.find("td:eq(2)").text();
+        group = row.find("td:eq(3)").text();
+        $("input#changeDN").val(dn);
         $("input#oldUID").val(uid);
         $("input#changeUID").val(uid);
-        $("input#changeCN").val(cn);
+        $("input#changeGN").val(givenname);
         $("input#changeSN").val(sn);
         $("input#changeGroup").val(group);
         $("input#oldGroup").val(group);
 
+        hideError();
         $("div#changeModal").modal('toggle');
-
     }
 
     function clearTable(){
-        //console.log($("table#employee_table > tbody"))
         $("table#employee_table > tbody").empty();
     }
 
     function reloadEmployees(){
         clearTable()
-        console.log($("tbody"))
         load_employees()
     }
 
     //emploYEET
-    function delete_employee(child){
+    function delete_employee(){
         hideError()
-        let uid = $(child).parent().parent().find("th").text();
+        let cn = $("form#deleteForm > input#deleteCN").text();
         $.ajax({
             url:"/intranet/delete_employee",
             method: "post",
-            data:{uid:uid},
+            data:{cn:cn},
             dataType: "json",
             success: (response)=>{
                 if(response.status){
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
                     $("div#error-box").addClass("alert-success");
+                    $("div#error-box").removeClass("alert-danger");
+                    $("div#deleteModal").modal("toggle");
                     reloadEmployees()
                 }else{
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
                     $("div#error-box").addClass("alert-danger");
-                    reloadEmployees()
+                    $("div#error-box").removeClass("alert-success");
                 }
-
             }
 
         })
@@ -272,11 +370,17 @@
             dataType: "json",
             success: (response)=>{
                 if(response.status){
-                    $("#changeModal").modal("toggle")
+                    $("#changeModal").modal("toggle");
+                    $("div#error-box > p").text(response.message);
+                    $("div#error-box").css("display", 'block');
+                    $("div#error-box").addClass("alert-success");
+                    $("div#error-box").removeClass("alert-danger");
+                    reloadEmployees();
                 }else{
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
                     $("div#error-box").addClass("alert-danger");
+                    $("div#error-box").removeClass("alert-success");
                 }
             }
         })
@@ -293,11 +397,14 @@
                     $("#createModal").modal("toggle")
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
+                    $("div#error-box").removeClass("alert-danger");
                     $("div#error-box").addClass("alert-success");
+                    reloadEmployees();
                 }else{
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
                     $("div#error-box").addClass("alert-danger");
+                    $("div#error-box").removeClass("alert-success");
                 }
             }
         })

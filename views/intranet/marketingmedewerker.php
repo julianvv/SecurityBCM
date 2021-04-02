@@ -13,13 +13,13 @@
                         <div class="card-header verbruiksmeter-header-intranet">
                             <h2>Landelijk</h2>
                         </div>
-                        <div class="card-body vebruiksmeter-cardbody-intranet">
+                        <div class="card-body vebruiksmeter-cardbody-intranet" id="landelijk-data">
                             <div class="card energie-kaart">
                                 <div class="card-header header-stroom">
                                     <h2 style="text-align: center">Stroom</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
-<!--                                    energie meter-->
+                                    <div id="stroom"></div>
                                 </div>
                             </div>
                             <div class="card energie-kaart">
@@ -27,7 +27,7 @@
                                     <h2>Gas</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
-<!--                                    gas meter-->
+                                    <div id="gas"></div>
                                 </div>
                             </div>
                             <div class="card energie-kaart">
@@ -35,7 +35,7 @@
                                     <h2>Opgewekt</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
-<!--                                    teruglevering-->
+                                    <div id="opgewekt"></div>
                                 </div>
                             </div>
                         </div>
@@ -93,13 +93,13 @@
                         <div class="card-header verbruiksmeter-header-intranet">
                             <h2 id="searched_postcode">>>Postcode<<</h2>
                         </div>
-                        <div class="card-body vebruiksmeter-cardbody-intranet">
+                        <div class="card-body vebruiksmeter-cardbody-intranet"  id="postcode-data">
                             <div class="card energie-kaart">
                                 <div class="card-header header-stroom">
                                     <h2 style="text-align: center">Stroom</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
-
+                                    <div id="stroom"></div>
                                 </div>
                             </div>
                             <div class="card energie-kaart">
@@ -107,7 +107,7 @@
                                     <h2>Gas</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
-
+                                    <div id="gas"></div>
                                 </div>
                             </div>
                             <div class="card energie-kaart">
@@ -115,6 +115,7 @@
                                     <h2>Opgewekt</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
+                                    <div id="opgewekt"></div>
                                 </div>
                             </div>
                         </div>
@@ -162,19 +163,20 @@
                                     Limburg
                                 </option>
                             </select>
-                            <button class="search-request" id="provincie-search" onclick="get_provincie()"><i class="fas fa-search"></i>
+                            <button class="search-request" id="provincie-search" onclick="vergelijkProvinciaal()"><i class="fas fa-search"></i>
                         </div>
                     </div>
                     <div class="card card-verbruik">
                         <div class="card-header verbruiksmeter-header-intranet">
                             <h2 id="searched_provincie">>>Provincie<<</h2>
                         </div>
-                        <div class="card-body vebruiksmeter-cardbody-intranet">
+                        <div class="card-body vebruiksmeter-cardbody-intranet" id="provincie-data">
                             <div class="card energie-kaart">
                                 <div class="card-header header-stroom">
                                     <h2 style="text-align: center">Stroom</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
+                                    <div id="stroom"></div>
                                 </div>
                             </div>
                             <div class="card energie-kaart">
@@ -182,7 +184,7 @@
                                     <h2>Gas</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
-
+                                    <div id="gas"></div>
                                 </div>
                             </div>
                             <div class="card energie-kaart">
@@ -190,6 +192,7 @@
                                     <h2>Opgewekt</h2>
                                 </div>
                                 <div class="card-body energie-cardbody">
+                                    <div id="opgewekt"></div>
                                 </div>
                             </div>
                         </div>
@@ -200,6 +203,11 @@
     </div>
 </div>
 <script>
+    $(document).ready(()=>{
+       vergelijkLandelijk();
+    });
+
+
     let gas = 0, energieHv = 0, energieLv = 0, changedGas = 0, teruggaveLv = 0, teruggaveHv = 0, changedHv= 0, changedLv = 0, changedTerugHv= 0, changedterugLv = 0;
 
     function get_klant() {
@@ -215,6 +223,7 @@
                 }else{
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
+                    $("div#error-box").removeClass("alert-success");
                     $("div#error-box").addClass("alert-danger");
                 }
             }
@@ -226,103 +235,31 @@
             method: 'post',
             success: (response) => {
                 if(response.status){
-                    gas = (response['verbruik'][0][2] - response['verbruik'][5][2])
-                    energieLv = (response['verbruik'][1][2] - response['verbruik'][6][2])
-                    energieHv = (response['verbruik'][2][2] - response['verbruik'][7][2])
-                    teruggaveLv = (response['verbruik'][3][2] - response['verbruik'][8][2])
-                    teruggaveHv = (response['verbruik'][4][2] - response['verbruik'][9][2])
-                    $("#klantnummer-data").find("#stroom").text("Laag tarief: "+energieLv+"\nHoog tarief: "+energieHv)
-                    $("#klantnummer-data").find("#gas").text("Gas: "+gas)
-                    $("#klantnummer-data").find("#opgewekt").text("Laag tarief: "+teruggaveLv+"\nHoog tarief: "+teruggaveHv)
+                    gas = (response['verbruik'][0][2] - response['verbruik'][5][2]).toFixed(2);
+                    energieLv = (response['verbruik'][1][2] - response['verbruik'][6][2]).toFixed(2);
+                    energieHv = (response['verbruik'][2][2] - response['verbruik'][7][2]).toFixed(2);
+                    teruggaveLv = (response['verbruik'][3][2] - response['verbruik'][8][2]).toFixed(2);
+                    teruggaveHv = (response['verbruik'][4][2] - response['verbruik'][9][2]).toFixed(2);
+                    let data = $("#klantnummer-data");
+                    data.find("#stroom").text("Laag tarief: "+energieLv+" Hoog tarief: "+energieHv)
+                    data.find("#gas").text("Gas: "+gas)
+                    data.find("#opgewekt").text("Laag tarief: "+teruggaveLv+" Hoog tarief: "+teruggaveHv)
                 }else{
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
+                    $("div#error-box").removeClass("alert-success");
                     $("div#error-box").addClass("alert-danger");
                 }
             }
         })
     }
 
-    function get_postcode() {
-        hideError();
-        $.ajax({
-            url: "/intranet/get_data",
-            data: { type:"postcode",postcode:$("input#mPostcode").val()},
-            dataType: 'json',
-            method: 'post',
-            success: (response) => {
-                if(response.status){
-                    $("h2#searched_postcode").text(response.result[0].a_postcode)
-                }else{
-                    $("div#error-box > p").text(response.message);
-                    $("div#error-box").css("display", 'block');
-                    $("div#error-box").addClass("alert-danger");
-                }
-            }
-        })
-    }
+    let landelijkGas, landelijkHv, landelijkLv, landelijkTHv, landelijkTLv = 0;
 
-    function get_provincie() {
-        hideError();
-        $.ajax({
-            url: "/intranet/get_data",
-            data: { type:"provincie",provincie:$("select#marketing-provincie").val()},
-            dataType: 'json',
-            method: 'post',
-            success: (response) => {
-                if(response.status){
-                    $("h2#searched_provincie").text(response.result[0].a_provincie)
-                }else{
-                    $("div#error-box > p").text(response.message);
-                    $("div#error-box").css("display", 'block');
-                    $("div#error-box").addClass("alert-danger");
-                }
-            }
-        })
-    }
-
-    $(document).ready(function(){
-
-    })
-
-    let chartklantHv, chartklantLv, chartGas, chartteruggaveLv, chartteruggaveHv;
-
-    function getgebruikerData()
+    function vergelijkLandelijk()
     {
         $.ajax({
-            url: "/verbruiksmeter",
-            dataType: "json",
-            method: "post",
-            data: { type: "klant" },
-            success: function(response)
-            {
-                if(response.status)
-                {
-                    gas = (response['verbruik'][0][2] - response['verbruik'][5][2])
-                    energieLv = (response['verbruik'][1][2] - response['verbruik'][6][2])
-                    energieHv = (response['verbruik'][2][2] - response['verbruik'][7][2])
-                    teruggaveLv = (response['verbruik'][3][2] - response['verbruik'][8][2])
-                    teruggaveHv = (response['verbruik'][4][2] - response['verbruik'][9][2])
-                }else
-                {
-                    $("div#error-box > p").text(response.message);
-                    $("div#error-box").css("display", 'block');
-                    $("div#error-box").addClass("alert-danger");
-                }
-            },
-            fail: function()
-            {
-                $(load).attr('hidden', true)
-            }
-        })
-    }
-
-    function vergelijkLandelijk(element)
-    {
-        let load = $(element).find('i.fa-spin')
-        $(load).attr('hidden', false)
-        $.ajax({
-            url: "/verbruiksmeter",
+            url: "/intranet/intranetData",
             dataType: "json",
             method: "post",
             data: { type: "landelijk" },
@@ -330,77 +267,79 @@
             {
                 if(response.status)
                 {
-                    changedGas = (response['landelijkGasM1'][0] - response['landelijkGasM2'][0])
-                    changedHv = (response['landelijkAvgHvM1'][0] - response['landelijkAvgHvM2'][0])
-                    changedLv = (response['landelijkAvgLvM1'][0] - response['landelijkAvgLvM2'][0])
-                    changedTerugHv = (response['landelijkTerugHvM1'][0] - response['landelijkTerugHvM2'][0])
-                    changedterugLv = (response['landelijkTerugLvM1'][0] - response['landelijkTerugLvM2'][0])
+                    landelijkGas = (response['landelijkGasM1'][0] - response['landelijkGasM2'][0]).toFixed(2);
+                    landelijkHv = (response['landelijkAvgHvM1'][0] - response['landelijkAvgHvM2'][0]).toFixed(2);
+                    landelijkLv = (response['landelijkAvgLvM1'][0] - response['landelijkAvgLvM2'][0]).toFixed(2);
+                    landelijkTHv = (response['landelijkTerugHvM1'][0] - response['landelijkTerugHvM2'][0]).toFixed(2);
+                    landelijkTLv = (response['landelijkTerugLvM1'][0] - response['landelijkTerugLvM2'][0]).toFixed(2);
+                    let data = $("#landelijk-data");
+                    data.find("#stroom").text("Laag tarief: "+landelijkLv+" Hoog tarief: "+landelijkHv)
+                    data.find("#gas").text("Gas: "+landelijkGas)
+                    data.find("#opgewekt").text("Laag tarief: "+landelijkTLv+" Hoog tarief: "+landelijkTHv)
                 }else
                 {
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
+                    $("div#error-box").removeClass("alert-success");
                     $("div#error-box").addClass("alert-danger");
                 }
-                $(load).attr('hidden', true)
-            },
-            fail: function()
-            {
-                $(load).attr('hidden', true)
             }
         })
     }
-
-    function vergelijkPostcode(element)
-    {
-        let load = $(element).find('i.fa-spin')
-        $(load).attr('hidden', false)
+    let postcodeGas, postcodeHv, postcodeLv, postcodeTHv, postcodeTLv = 0;
+    function get_postcode() {
+        hideError();
+        let postcode = $("input#mPostcode").val();
         $.ajax({
-            url: "/verbruiksmeter",
-            dataType: "json",
-            method: "post",
-            data: { type: "postcode" },
-            success: function(response)
-            {
-                if(response.status)
-                {
-                    changedGas = (response['postcodeGasM1'][0] - response['postcodeGasM2'][0])
-                    changedHv = (response['postcodeAvgHvM1'][0] - response['postcodeAvgHvM2'][0])
-                    changedLv = (response['postcodeAvgLvM1'][0] - response['postcodeAvgLvM2'][0])
-                    changedTerugHv = (response['postcodeTerugHvM1'][0] - response['postcodeTerugHvM2'][0])
-                    changedterugLv = (response['postcodeTerugLvM1'][0] - response['postcodeTerugLvM2'][0])
-                }else
-                {
+            url: "/intranet/intranetData",
+            data: { type:"postcode",postcode:postcode},
+            dataType: 'json',
+            method: 'post',
+            success: (response) =>{
+                if (response.status){
+                    console.log(response)
+                    postcodeGas = (response['postcodeGasM1'][0] - response['postcodeGasM2'][0]).toFixed(2);
+                    postcodeHv = (response['postcodeAvgHvM1'][0] - response['postcodeAvgHvM2'][0]).toFixed(2);
+                    postcodeLv = (response['postcodeAvgLvM1'][0] - response['postcodeAvgLvM2'][0]).toFixed(2);
+                    postcodeTHv = (response['postcodeTerugHvM1'][0] - response['postcodeTerugHvM2'][0]).toFixed(2);
+                    postcodeTLv = (response['postcodeTerugLvM1'][0] - response['postcodeTerugLvM2'][0]).toFixed(2);
+                    let data = $("#postcode-data");
+                    data.find("#stroom").text("Laag tarief: "+postcodeLv+" Hoog tarief: "+postcodeHv)
+                    data.find("#gas").text("Gas: "+postcodeGas)
+                    data.find("#opgewekt").text("Laag tarief: "+postcodeTLv+" Hoog tarief: "+postcodeTHv)
+                }else{
                     $("div#error-box > p").text(response.message);
                     $("div#error-box").css("display", 'block');
+                    $("div#error-box").removeClass("alert-success");
                     $("div#error-box").addClass("alert-danger");
                 }
-                $(load).attr('hidden', true)
-            },
-            fail: function()
-            {
-                $(load).attr('hidden', true)
+                console.log(response);
+                $("h2#searched_postcode").text(postcode);
             }
-        })
+        });
     }
-
-    function vergelijkProvinciaal(provincieNaam, element)
+    let provincieGas, provincieHv, provincieLv, provincieTHv, provincieTLv = 0;
+    function vergelijkProvinciaal()
     {
-        let load = $(element).find('i.fa-spin')
-        $(load).attr('hidden', false)
-        let name = provincieNaam
+        let name = $("#marketing-provincie").val();
         $.ajax({
-            url: "/verbruiksmeter",
+            url: "/intranet/intranetData",
             dataType: "json",
             method: "post",
             data: { type: "provincie", provincie: name},
             success: function(response){
                 if(response.status)
                 {
-                    changedGas = (response['provincieGasM1'][0] - response['provincieGasM2'][0])
-                    changedHv = (response['provincieAvgHvM1'][0] - response['provincieAvgHvM2'][0])
-                    changedLv = (response['provincieAvgLvM1'][0] - response['provincieAvgLvM2'][0])
-                    changedTerugHv = (response['provincieTerugHvM1'][0] - response['provincieTerugHvM2'][0])
-                    changedterugLv = (response['provincieTerugLvM1'][0] - response['provincieTerugLvM2'][0])
+                    $("h2#searched_provincie").text(name);
+                    provincieGas = (response['provincieGasM1'][0] - response['provincieGasM2'][0]).toFixed(2);
+                    provincieHv = (response['provincieAvgHvM1'][0] - response['provincieAvgHvM2'][0]).toFixed(2);
+                    provincieLv = (response['provincieAvgLvM1'][0] - response['provincieAvgLvM2'][0]).toFixed(2);
+                    provincieTHv = (response['provincieTerugHvM1'][0] - response['provincieTerugHvM2'][0]).toFixed(2);
+                    provincieTLv = (response['provincieTerugLvM1'][0] - response['provincieTerugLvM2'][0]).toFixed(2);
+                    let data = $("#provincie-data");
+                    data.find("#stroom").text("Laag tarief: "+provincieLv+" Hoog tarief: "+provincieHv)
+                    data.find("#gas").text("Gas: "+provincieGas)
+                    data.find("#opgewekt").text("Laag tarief: "+provincieTLv+" Hoog tarief: "+provincieTHv)
                 }
                 else
                 {
@@ -408,11 +347,6 @@
                     $("div#error-box").css("display", 'block');
                     $("div#error-box").addClass("alert-danger");
                 }
-                $(load).attr('hidden', true)
-            },
-            fail: function()
-            {
-                $(load).attr('hidden', true)
             }
         })
     }

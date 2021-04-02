@@ -639,3 +639,21 @@ SCROLLBARS
 .dropdown a:hover {background-color: #ddd;}
 
 .show {display: block;}
+
+.account-header-intranet {
+    background-color: #4792d2;
+}
+
+.account-gegevens-intranet {
+    padding: 1vh;
+}
+
+.button-account-intranet {
+    border-radius: 5px;
+    background-color: #4792d2;
+    border-color: black;
+    color: white;
+    font-weight: bolder;
+    margin: 1%;
+    width: 90%;
+}
