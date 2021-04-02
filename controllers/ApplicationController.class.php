@@ -19,6 +19,54 @@ class ApplicationController extends Controller
         ]);
     }
 
+    public function showResetPage()
+    {
+        return View::view('resetpassword', ['title' => "Wachtwoord herstellen"]);
+    }
+
+    public function processResetPage()
+    {
+        $data = Application::$app->request->getBody();
+        $pass = $data['password'];
+        $pass_confirm = $data['password_new'];
+        $email = $data['email'];
+        $code = $data['code'];
+        if (empty($pass) || empty($pass_confirm) || empty($email) || empty($code)){
+            die(json_encode(['status'=>false, 'message'=>'Vul alle velden in.']));
+        }
+
+        if (!filter_var($pass, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp" => "/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W])\S*$/")))){
+            die(json_encode(array("status" => false, "message" => "Wachtwoord voldoet niet aan de eisen.")));
+        }
+
+        if ($pass != $pass_confirm){
+            die(json_encode(['status'=>false, 'message'=>'Wachtwoorden komen niet overeen.']));
+        }
+
+        $stmt = Application::$app->db->prepare("SELECT User.email, tbl_klanten_verificatie.v_code
+                                                    FROM tbl_klanten_verificatie
+                                                    JOIN User ON User.id = tbl_klanten_verificatie.v_fk_idUser
+                                                    WHERE User.email = :email AND tbl_klanten_verificatie.v_code = :code");
+        $stmt->bindParam("email", $email, \PDO::PARAM_STR);
+        $stmt->bindParam("code", $code, \PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch = $stmt->fetch();
+        if(!$fetch){
+            Application::$app->logger->writeToLog(sprintf("Gebruiker `%s` heeft onsuccesvol zijn/haar wachtwoord proberen te wijzigen.", $fetch['id']));
+            die(json_encode(['status'=>false, 'message'=>'Combinatie incorrect.']));
+        }else{
+            $stmt = Application::$app->db->prepare("DELETE FROM tbl_klanten_verificatie WHERE v_fk_idUser = :id AND v_code = :code");
+            $stmt->bindParam("id", $fetch['id'], \PDO::PARAM_INT);
+            $stmt->bindParam("code", $code, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            Application::$app->ldap->changePassword($email, $pass, "klant");
+            Application::$app->logger->writeToLog(sprintf("Gebruiker `%s` heeft succesvol zijn/haar wachtwoord gewijzigd.", $fetch['id']));
+            Application::$app->session->setFlash('notification', ['type' => 'alert-success', 'message' => 'Wachtwoord succesvol gewijzigd.']);
+            die(json_encode(['status'=>true]));
+        }
+    }
+
     public function forgotPassword()
     {
         $data = Application::$app->request->getBody();

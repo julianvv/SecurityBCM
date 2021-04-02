@@ -189,8 +189,8 @@ class IntranetController extends Controller
             die(json_encode(["status"=>false, "message"=>"Invalide rechten"]));
         }
         $cn = $data['cn'] ?? '';
-
-        if(Application::$app->db->getRoleRank($data["group"])>Application::$app->db->getRoleRank(Application::$app->session->get("employee_group"))){
+        $dn = "cn=".$cn.",ou=employees,ou=users,ou=energiemeter,dc=energiemeter,dc=local";
+        if(Application::$app->db->getRoleRank(Application::$app->ldap->getEmployeeGroup($dn))>Application::$app->db->getRoleRank(Application::$app->session->get("employee_group"))){
             if(Application::$app->ldap->deleteEmployee($cn)){
                 die(json_encode(["status"=>true, "message"=>"Medewerker succesvol verwijderd."]));
             }
